@@ -1,0 +1,463 @@
+SQL> --
+SQL>   SELECT user,
+  2           TO_CHAR(SYSDATE, 'dd-mm-yy hh24:mi:ss')
+  3    FROM   dual
+  4  ;
+
+USER                           TO_CHAR(SYSDATE,'
+------------------------------ -----------------
+VKOWAL2S                       16-01-24 13:42:42
+
+SQL> --
+SQL> -- ***************************************************************
+SQL> -- * S Q L - B E I S P I E L - V I E W S
+SQL> --
+SQL> CREATE OR
+  2  REPLACE VIEW
+  3  ;
+
+Error starting at line : 50 in command -
+CREATE OR
+REPLACE VIEW
+Error report -
+ORA-00999: invalid view name
+00999. 00000 -  "invalid view name"
+*Cause:    
+*Action:
+SQL> 
+SQL> DESCRIBE
+Usage: DESCRIBE [schema.]object[@db_link]
+SQL> 
+SQL> SELECT	      *
+  2  FROM
+  3  ;
+
+Error starting at line : 56 in command -
+SELECT	      *
+FROM
+
+Error at Command Line : 57 Column : 4
+Error report -
+SQL Error: ORA-00903: invalid table name
+00903. 00000 -  "invalid table name"
+*Cause:    
+*Action:
+SQL> 
+SQL> --
+SQL> --      Erstellen Sie die folgenden Sichten:
+SQL> --
+SQL> --      Virtuelle Tabelle „Fachbereich“ mit allen Spalten der
+SQL> --      korrespondierenden Tabelle der konzeptionellen Ebene
+SQL> --      (Beispiel einer sehr einfachen View, die exakt der zugrunde
+SQL> --      liegenden Tabelle entspricht).
+SQL> --
+SQL> --CREATE OR
+SQL> --REPLACE VIEW  dbs_v_student
+SQL> --AS SELECT     *
+SQL> --FROM          dbs_tab_student;
+SQL> 
+SQL> --DESCRIBE dbs_v_student
+SQL> 
+SQL> --SELECT	      *
+SQL> --FROM  dbs_v_student;
+SQL> 
+SQL> CREATE OR
+  2  REPLACE VIEW    dbs_v_fachbereich
+  3  AS SELECT       *
+  4  FROM            dbs_tab_fachbereich;
+
+View DBS_V_FACHBEREICH created.
+
+SQL> 
+SQL> --
+SQL> --      Virtuelle Tabelle „Fachbereich hat Dekan“. Die View soll
+SQL> --      nur die Spalten Name des Fachbereichs und Name des Dekans
+SQL> --      enthalten.
+SQL> --
+SQL> CREATE OR 
+  2  REPLACE VIEW    dbs_v_fb_hat_dekan
+  3  AS SELECT       fb_name, dekan
+  4  FROM            dbs_tab_fachbereich;
+
+View DBS_V_FB_HAT_DEKAN created.
+
+SQL> 
+SQL> --
+SQL> --      Virtuelle Tabelle „Fachbereich beschaeftigt Mitarbeiter“.
+SQL> --      Die View soll nur die Spalten Name des Fachbereichs und
+SQL> --      Name des Mitarbeiters enthalten und standardmäßig nach
+SQL> --      dem Namen des Fachbereichs und bei Gleichheit nach dem
+SQL> --      Namen des Mitarbeiters sortiert werden.
+SQL> 
+SQL> CREATE OR
+  2  REPLACE VIEW    dbs_v_fb_beschäftigt_mitar
+  3  AS SELECT       f.fb_name, h.ho_name
+  4  FROM            dbs_tab_fachbereich f
+  5  INNER JOIN      dbs_tab_mitarbeiter m ON f.fb_nr = m.fb_nr
+  6  INNER JOIN      dbs_tab_hochschulangehoeriger h ON m.ho_nr = h.ho_nr
+  7  ORDER BY        f.fb_name ASC, h.ho_name ASC;
+
+View DBS_V_FB_BESCHÄFTIGT_MITAR created.
+
+SQL> 
+SQL> 
+SQL> --
+SQL> --      Virtuelle Tabelle „Fachbereich bietet Lehrveranstaltung“.
+SQL> --      Die View soll lediglich den Namen des Fachbereichs und den
+SQL> --      Namen der Lehrveranstaltung enthalten und nach dem Namen
+SQL> --      der Lehrveranstaltung, sowie bei Gleichheit nach dem Namen
+SQL> --      des Fachbereichs sortiert werden.
+SQL> --
+SQL> CREATE OR
+  2  REPLACE VIEW    dbs_v_fb_bietet_lv
+  3  AS SELECT       lv.lv_name, f.fb_name
+  4  FROM            dbs_tab_fachbereich f
+  5  INNER JOIN      dbs_tab_lehrveranstaltung lv ON f.fb_nr = lv.fb_nr
+  6  ORDER BY        lv.lv_name ASC, f.fb_name ASC;
+
+View DBS_V_FB_BIETET_LV created.
+
+SQL> 
+SQL> 
+SQL> --
+SQL> --      Virtuelle Tabelle „Lehrveranstaltungen des Fachbereichs
+SQL> --      Informatik“. Nutzen Sie zur Erstellung dieser View die zuvor
+SQL> --      erstellte View „Fachbereich bietet Lehrveranstaltung“.
+SQL> --
+SQL> CREATE OR
+  2  REPLACE VIEW    dbs_v_lv_von_fb02
+  3  AS SELECT   lv_name as LV_im_FB02
+  4  FROM        dbs_v_fb_bietet_lv
+  5  WHERE       fb_name = 'Informatik';
+
+View DBS_V_LV_VON_FB02 created.
+
+SQL> 
+SQL> --
+SQL> --      Virtuelle Tabelle „Hochschulangehoeriger“. Die View soll
+SQL> --      lediglich die relevanten und objektidentifizierenden Spalten
+SQL> --      des semantisch ausdrucksstarken Objekts „Hochschulangehoeriger“
+SQL> --      enthalten (also nicht die Spalten an_nr und vo_nr). Die View
+SQL> --      soll standardmäßig nach dem Namen des Hochschulangehörigen
+SQL> --      sortiert werden.
+SQL> --
+SQL> --      Frage: Warum ist dieses Sortierkriterium nicht immer
+SQL> --      hilfreich?
+SQL> --      Frage: Warum tauchen einige der Hochschulangehörigen
+SQL> --      offenbar mehrfach auf?
+SQL> --      Weil sie mehrere Vorname bzw adressen haben
+SQL> --
+SQL> CREATE OR
+  2  REPLACE VIEW    dbs_v_hochschulangehoeriger
+  3  AS SELECT       h.ho_nr, h.ho_name, v.vorname, a.plz, a.ort, a.strasse, a.haus_nr
+  4  FROM            dbs_tab_hochschulangehoeriger h
+  5  INNER JOIN      dbs_tab_anschrift a ON h.ho_nr = a.ho_nr
+  6  INNER JOIN      dbs_tab_vorname v ON h.ho_nr = v.ho_nr
+  7  ORDER BY        h.ho_name ASC;
+
+View DBS_V_HOCHSCHULANGEHOERIGER created.
+
+SQL> 
+SQL> 
+SQL> --
+SQL> --      Virtuelle Tabelle „Mitarbeiter“. Die View soll lediglich
+SQL> --      die relevanten und objektidentifizierenden Spalten des
+SQL> --      semantisch ausdrucksstarken Objekts „Mitarbeiter“, sowie
+SQL> --      den Namen des Fachbereichs wo dieser angestellt ist enthalten.
+SQL> --      Bitte lassen Sie die Spalte Gehalt weg. Die View soll standardmäßig
+SQL> --      nach dem Namen des Fachbereichs und bei Gleichheit nach dem
+SQL> --      Namen des Mitarbeiters sortiert werden.
+SQL> --
+SQL> --      Frage: Warum wäre ein zweites Sortierkriterium nach der
+SQL> --      Personalnummer hilfreicher?
+SQL> --
+SQL> CREATE OR
+  2  REPLACE VIEW    dbs_v_mitarbeiter
+  3  AS SELECT       m.pers_nr, f.fb_name as Fachbereich, h.ho_name as Name, m.institution, m.beruf
+  4  FROM            dbs_tab_mitarbeiter m
+  5  INNER JOIN      dbs_tab_hochschulangehoeriger h ON m.ho_nr = h.ho_nr
+  6  INNER JOIN      dbs_tab_fachbereich f ON m.fb_nr = f.fb_nr
+  7  ORDER BY        f.fb_name ASC, ho_Name ASC;
+
+View DBS_V_MITARBEITER created.
+
+SQL> 
+SQL> --
+SQL> --      Virtuelle Tabelle „Professor“. Die View soll lediglich
+SQL> --      die relevanten und objektidentifizierenden Spalten des
+SQL> --      semantisch ausdrucksstarken Objekts „Professor“, sowie
+SQL> --      den Namen des Fachbereichs wo dieser angestellt ist enthalten.
+SQL> --      Bitte lassen Sie die Spalte Gehalt weg. Die View soll standardmäßig
+SQL> --      nach dem Namen des Fachbereichs und bei Gleichheit nach der
+SQL> --      Personalnummer des Professors sortiert werden.
+SQL> --
+SQL> --      Frage: Kann man zur Erstellung dieser View auf die zuvor
+SQL> --      erstellte View „Mitarbeiter“ zurückgreifen?
+SQL> --
+SQL> CREATE OR
+  2  REPLACE VIEW    dbs_v_professor
+  3  AS SELECT       p.titel, p.fachgebiet, m.*
+  4  FROM            dbs_tab_professor p
+  5  INNER JOIN      dbs_v_mitarbeiter m ON p.pers_nr = m.pers_nr
+  6  ORDER BY        m.fachbereich ASC, m.pers_nr ASC;
+
+View DBS_V_PROFESSOR created.
+
+SQL> 
+SQL> 
+SQL> --
+SQL> --      Virtuelle Tabelle „Student“. Die View soll lediglich die relevanten
+SQL> --      und objektidentifizierenden Spalten des semantisch ausdrucksstarken
+SQL> --      Objekts „Student“, sowie den Namen des Fachbereichs wo dieser
+SQL> --      immatrikuliert ist enthalten. Bitte lassen Sie die Spalte Personalnummer
+SQL> --      weg. Die View soll standardmäßig nach dem Namen des Fachbereichs und
+SQL> --      bei Gleichheit nach der Matrikelnummer des Studenten sortiert werden.
+SQL> 
+SQL> CREATE OR
+  2  REPLACE VIEW    dbs_v_student
+  3  AS SELECT       f.fb_name, s.matr_nr
+  4  FROM            dbs_tab_student s
+  5  INNER JOIN      dbs_tab_fachbereich f ON s.fb_nr = f.fb_nr
+  6  ORDER BY        f.fb_name ASC, s.matr_nr ASC;
+
+View DBS_V_STUDENT created.
+
+SQL> 
+SQL> 
+SQL> --
+SQL> --      Virtuelle Tabelle „Studentischer Mitarbeiter“. Die View soll lediglich
+SQL> --      die relevanten und objektidentifizierenden Spalten des semantisch
+SQL> --      ausdrucksstarken Objekts „Student“, sowie den Namen des Fachbereichs
+SQL> --      wo dieser angestellt ist und den Namen des Fachbereichs wo dieser
+SQL> --      immatrikuliert ist enthalten. Bitte lassen Sie die Spalten Matrikelnummer
+SQL> --      und Gehalt weg. Die View soll standardmäßig nach dem Namen des
+SQL> --      Fachbereichs der Mitarbeiter und bei Gleichheit nach der Personalnummer
+SQL> --      des Studenten sortiert werden.
+SQL> 
+SQL> --      Frage: Kann man zur Erstellung dieser View auf die zuvor erstellte
+SQL> --      View „Mitarbeiter“ und / oder „Student“ zurückgreifen?
+SQL> --
+SQL> CREATE OR
+  2  REPLACE VIEW    dbs_v_studmitar
+  3  AS SELECT       s.matr_nr, m.*
+  4  FROM            dbs_tab_student s
+  5  INNER JOIN      dbs_v_mitarbeiter m ON s.pers_nr = m.pers_nr
+  6  ORDER BY        m.fachbereich ASC, m.pers_nr ASC;
+
+View DBS_V_STUDMITAR created.
+
+SQL> 
+SQL> --
+SQL> --      Virtuelle Tabelle „Professor haelt Lehrveranstaltung“. Die View
+SQL> --      soll Titel, Namen und Fachgebiet des Professors und den Namen der
+SQL> --      Lehrveranstaltung enthalten. Die View soll nach der Nummer des
+SQL> --      Hochschulangehörigen sortiert werden (auch wenn diese nicht
+SQL> --      Bestandteil der View ist).
+SQL> --
+SQL> --      Frage: Warum ist an dieser Stelle ein „distinct“ hilfreich?
+SQL> --      Weil manche LV an mehreren Tagen stattfinden
+SQL> 
+SQL> CREATE OR
+  2  REPLACE VIEW        dbs_v_prof_haelt_lv
+  3  AS SELECT DISTINCT  *
+  4  FROM (
+  5      SELECT          l.lv_name, p.fachgebiet, h.ho_name as Name
+  6      FROM            dbs_tab_prof_haelt_lv plv
+  7      INNER JOIN      dbs_tab_professor p ON p.pers_nr = plv.pers_nr
+  8      INNER JOIN      dbs_tab_lehrveranstaltung l ON plv.lv_nr = l.lv_nr
+  9      INNER JOIN      dbs_tab_mitarbeiter m ON p.pers_nr = m.pers_nr
+ 10      INNER JOIN      dbs_v_hochschulangehoeriger h ON m.ho_nr = h.ho_nr
+ 11      ORDER BY        h.ho_nr ASC
+ 12  );
+
+View DBS_V_PROF_HAELT_LV created.
+
+SQL> 
+SQL> --
+SQL> --      Virtuelle Tabelle „Pruefungen“. Die View soll lediglich
+SQL> --	    die relevanten und objektidentifizierenden Spalten des
+SQL> --	    semantisch ausdrucksstarken Objekts „Pruefungen“ enthalten.
+SQL> --	    Die View soll namentlich: Lehrveranstaltung, Professor und
+SQL> --	    Student mit Name und erstem Vornamen in einer Spalte,
+SQL> --	    in der Form: "Name, ersterVorname"
+SQL> --	    (Bsp. Konkatenation: „Name || ´,´ || Vorname“), sowie die
+SQL> --	    Note enthalten. Standardmäßig aufsteigend sortiert nach
+SQL> --	    Lehrveranstaltung und Professor, absteigend nach Student
+SQL> --	    und aufsteigend nach Note.
+SQL> --
+SQL> --      Frage: Wie lösen Sie das Problem, dass der ho_name sowohl für
+SQL> --      Professoren als auch für Studenten benötigt wird? In wiefern
+SQL> --      ist hierbei distinct zu verwenden bzw. welche Gefahr besteht durch
+SQL> --      die Verwendung?
+SQL> CREATE OR
+  2  REPLACE VIEW        dbs_v_pruefungen
+  3  AS SELECT DISTINCT  *
+  4  FROM (
+  5      SELECT       l.lv_name, prof.name, h.ho_name || ',' || h.vorname as Name_ersterVorname, p.note
+  6      FROM         dbs_tab_pruefung p
+  7      INNER JOIN   dbs_v_professor prof ON p.professor = prof.pers_nr
+  8      INNER JOIN   dbs_tab_lehrveranstaltung l ON p.lv_nr = l.lv_nr
+  9      INNER JOIN   dbs_tab_student s ON p.matr_nr = s.matr_nr
+ 10      INNER JOIN   dbs_v_hochschulangehoeriger h ON s.ho_nr = h.ho_nr
+ 11      ORDER BY     l.lv_name ASC, prof.name ASC, h.ho_name DESC, h.vorname DESC, p.note ASC
+ 12  );
+
+View DBS_V_PRUEFUNGEN created.
+
+SQL> 
+SQL> 
+SQL> --      Einfügen in Views
+SQL> --
+SQL> --      Testen Sie den Einfügevorgang in der zuvor erstellten View "Fachbereich".
+SQL> --
+SQL> --      Frage: Warum ist ein Einfügen möglich?
+SQL> --      Weil es keine Gruppierung von Tabellen ist, sich nur auf eine tabelle beschränkt
+SQL> --
+SQL> INSERT INTO dbs_v_fachbereich
+  2  VALUES (
+  3      4, 
+  4      'Mathematik',
+  5      509514    
+  6  );
+
+1 row inserted.
+
+SQL> 
+SQL> --
+SQL> --      Testen Sie den Einfügevorgang in die zuvor erstellte View
+SQL> --      „Hochschulangehoeriger“.
+SQL> --
+SQL> --      Frage: Warum ist ein Einfügen hier grundsätzlich nicht möglich?
+SQL> --      Weil die View Joins enthält und nicht nur auf einer Tabelle basiert
+SQL> INSERT INTO dbs_v_hochschulangehoeriger 
+  2  VALUES ( 
+  3      (SELECT MAX(ho_nr)+1 FROM dbs_v_hochschulangehoeriger),
+  4      'Buche',
+  5      'Peter',
+  6      '40325',
+  7      'Bonn',
+  8      'Testweg',
+  9      '45'
+ 10  );
+
+Error starting at line : 307 in command -
+INSERT INTO dbs_v_hochschulangehoeriger 
+VALUES ( 
+    (SELECT MAX(ho_nr)+1 FROM dbs_v_hochschulangehoeriger),
+    'Buche',
+    'Peter',
+    '40325',
+    'Bonn',
+    'Testweg',
+    '45'
+)
+Error at Command Line : 307 Column : 1
+Error report -
+SQL Error: ORA-01779: cannot modify a column which maps to a non key-preserved table
+01779. 00000 -  "cannot modify a column which maps to a non key-preserved table"
+*Cause:    An attempt was made to insert or update columns of a join view which
+           map to a non-key-preserved table.
+*Action:   Modify the underlying base tables directly.
+SQL> 
+SQL> 
+SQL> --
+SQL> --      Änderung von Datensätzen in Views
+SQL> --
+SQL> --      Ändern Sie den Namen eines Fachbereichs in der zuvor erstellten
+SQL> --      View „Fachbereich“.
+SQL> --
+SQL> --      Frage: Warum ist die Änderung möglich?
+SQL> --      Weil es keine Gruppierung von Tabellen ist, sich nur auf eine tabelle beschränkt
+SQL> UPDATE dbs_v_fachbereich
+  2  SET    fb_name = 'Numerik'  
+  3  WHERE  fb_name = 'Mathematik';
+
+1 row updated.
+
+SQL> 
+SQL> 
+SQL> --
+SQL> --     Ändern Sie den Namen eines Hochschulangehörigen in der zuvor
+SQL> --     erstellten View "Hochschulangehoeriger".
+SQL> --
+SQL> --     Frage: Warum sollte diese Änderung grundsätzlich möglich sein?
+SQL> --     Welcher Grund wird dennoch für die Ablehnung angegeben?
+SQL> --     Weil die View auf mehreren Tabellen basiert und dadurch die Änderung in mehreren Tabellen durchgeführt werden muss
+SQL> --
+SQL> UPDATE dbs_v_hochschulangehoeriger
+  2  SET    ho_name = 'Baecker'
+  3  WHERE  ho_name = 'Becker';
+
+Error starting at line : 340 in command -
+UPDATE dbs_v_hochschulangehoeriger
+SET    ho_name = 'Baecker'
+WHERE  ho_name = 'Becker'
+Error at Command Line : 341 Column : 8
+Error report -
+SQL Error: ORA-01779: cannot modify a column which maps to a non key-preserved table
+01779. 00000 -  "cannot modify a column which maps to a non key-preserved table"
+*Cause:    An attempt was made to insert or update columns of a join view which
+           map to a non-key-preserved table.
+*Action:   Modify the underlying base tables directly.
+SQL> 
+SQL> 
+SQL> --
+SQL> --     Löschen von Datensätzen in Views
+SQL> --
+SQL> --     Löschen Sie den zuvor erstellten neuen Fachbereich in der View
+SQL> --     "Fachbereich".
+SQL> --
+SQL> --     Frage: Warum ist die Löschung möglich?
+SQL> --     Weil die View Joins enthält und nicht nur auf einer Tabelle basiert
+SQL> DELETE
+  2  FROM    dbs_v_fachbereich
+  3  WHERE   fb_nr = '4';
+
+1 row deleted.
+
+SQL> 
+SQL> 
+SQL> --
+SQL> --     Löschen Sie den Hochschulangehörigen mit der Nr. 1020 in der zuvor
+SQL> --     erstellten View "Hochschulangehoeriger".
+SQL> --
+SQL> --     Frage: Warum sollte diese Löschung grundsätzlich möglich sein?
+SQL> --     Welcher Grund wird dennoch für die Ablehnung angegeben?
+SQL> --        The deleted table had
+SQL> --           - no key-preserved tables,
+SQL> --           - more than one key-preserved table, or
+SQL> --           - the key-preserved table was an unmerged view.
+SQL> --
+SQL> DELETE
+  2  FROM    dbs_v_hochschulangehoeriger
+  3  WHERE   ho_nr = 1020;
+
+Error starting at line : 369 in command -
+DELETE
+FROM    dbs_v_hochschulangehoeriger
+WHERE   ho_nr = 1020
+Error at Command Line : 370 Column : 9
+Error report -
+SQL Error: ORA-01752: cannot delete from view without exactly one key-preserved table
+01752. 00000 -  "cannot delete from view without exactly one key-preserved table"
+*Cause:    The deleted table had
+           - no key-preserved tables,
+           - more than one key-preserved table, or
+           - the key-preserved table was an unmerged view.
+*Action:   Redefine the view or delete it from the underlying base tables.
+SQL> 
+SQL> 
+SQL> --
+SQL> -- Systemdatum
+SQL> --
+SQL>   SELECT user,
+  2           TO_CHAR(SYSDATE, 'dd-mm-yy hh24:mi:ss')
+  3    FROM   dual
+  4  ;
+
+USER                           TO_CHAR(SYSDATE,'
+------------------------------ -----------------
+VKOWAL2S                       16-01-24 13:42:43
+
+SQL> --
+SQL> spool off

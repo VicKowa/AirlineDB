@@ -1,0 +1,497 @@
+SQL> --
+SQL>   SELECT user,
+  2           TO_CHAR(SYSDATE, 'dd-mm-yy hh24:mi:ss')
+  3    FROM   dual
+  4  ;
+
+USER                           TO_CHAR(SYSDATE,'
+------------------------------ -----------------
+VKOWAL2S                       15-01-24 23:35:04
+
+SQL> --
+SQL> -- ***************************************************************
+SQL> -- * S Q L - B E I S P I E L M A N I P U L T I O N E N
+SQL> --
+SQL> --  Bitte beachten Sie, dass sich die angegebene Anzahl zu aktualisierender Datensätze auf die
+SQL> --  unveränderte Übungsdatenbank bezieht. Sollten Sie Ihre Datensätze zwischenzeitlich verändert
+SQL> --  haben, dann besteht jederzeit die Möglichkeit die Übungsdatenbank neu aufzubauen (siehe Übung 6/7).
+SQL> --
+SQL> --  3.1   Änderung von Datensätzen
+SQL> --
+SQL> --      Ändern Sie die folgenden Datensätze jeweils im Rahmen
+SQL> --      eines einzelnen SQL-Befehls:
+SQL> --
+SQL> --      Ändern Sie die Hausnummer des Gebäudes "A" in "97". (Anzahl zu aktualisierender Zeilen: 1)
+SQL> --
+SQL> -- <3.1.1>
+SQL> 
+SQL> --UPDATE   dbs_tab_mitarbeiter
+SQL> --SET      gehalt = gehalt + gehalt * 4 / 100
+SQL> --;
+SQL> 
+SQL> UPDATE  dbs_tab_gebaeude
+  2  SET     haus_nr = 97
+  3  WHERE   Gebaeude = 'A';
+
+1 row updated.
+
+SQL> 
+SQL> -- </3.1.1>
+SQL> --
+SQL> --      Erhöhen Sie das Gehalt aller Mitarbeiter um 4 Prozent. (Anzahl zu aktualisierender Zeilen: 14)
+SQL> --
+SQL> -- <3.1.2>
+SQL> UPDATE  dbs_tab_mitarbeiter
+  2  SET     gehalt = (gehalt * 1.04);
+
+14 rows updated.
+
+SQL> 
+SQL> 
+SQL> -- </3.1.2>
+SQL> --
+SQL> --      Professor Becker wird neuer Dekan des Fachbereichs Informatik. (Anzahl zu aktualisierender Zeilen: 1)
+SQL> --
+SQL> --      Frage: Wie können Sie die zur Beantwortung dieser Änderung
+SQL> --      erforderlichen beiden SQL-Befehle zu einem Befehl kombinieren?
+SQL> --
+SQL> -- <3.1.3>
+SQL> UPDATE  dbs_tab_fachbereich
+  2  SET     dekan = (
+  3      SELECT      pers_nr
+  4      FROM        dbs_tab_mitarbeiter m 
+  5      INNER JOIN  dbs_tab_hochschulangehoeriger h
+  6      ON          m.ho_nr = h.ho_nr
+  7      WHERE       h.ho_name = 'Becker'
+  8  
+  9  )
+ 10  WHERE   fb_nr = 2;
+
+1 row updated.
+
+SQL> 
+SQL> 
+SQL> -- </3.1.3>
+SQL> --
+SQL> --      Ändern Sie die Straßenangabe des Professors mit dem
+SQL> --      Fachgebiet "Statistik" in "Siegburger Straße 99a" um. (Anzahl zu aktualisierender Zeilen: 1)
+SQL> --
+SQL> --      Frage: Was muss beachtet werden, wenn Sie in der
+SQL> --      SET-Anweisung mit Unteranfrage das "="-Zeichen verwenden?
+SQL> --
+SQL> -- <3.1.4>
+SQL> UPDATE  dbs_tab_anschrift
+  2  SET     strasse = 'Siegburger Straße', haus_nr = '99a'
+  3  WHERE   ho_nr IN (
+  4      SELECT  h.ho_nr
+  5      FROM    ((( dbs_tab_anschrift a
+  6              INNER JOIN  dbs_tab_hochschulangehoeriger h
+  7              ON          a.ho_nr = h.ho_nr
+  8          )
+  9          INNER JOIN  dbs_tab_mitarbeiter m
+ 10          ON          h.ho_nr = m.ho_nr
+ 11      )
+ 12      INNER JOIN  dbs_tab_professor p
+ 13      ON          m.pers_nr = p.pers_nr
+ 14      )
+ 15      WHERE       fachgebiet = 'Statistik'
+ 16  );
+
+1 row updated.
+
+SQL> 
+SQL> -- </3.1.4>
+SQL> 
+SQL> --		Alle Teilnehmer der letzten Prüfung in Datenbanksysteme
+SQL> --		erhalten eine Notenverbesserung um 10%. (Anzahl zu aktualisierender Zeilen: 2)
+SQL> --
+SQL> -- <3.1.5>
+SQL> UPDATE  dbs_tab_pruefung
+  2  SET     note = (note * 0.9)
+  3  WHERE   datum = (
+  4      SELECT  MAX(datum)
+  5      FROM    dbs_tab_pruefung
+  6      WHERE   lv_nr = (
+  7          SELECT  lv_nr
+  8          FROM    dbs_tab_lehrveranstaltung
+  9          WHERE   lv_name = 'Datenbanksysteme'
+ 10      )
+ 11  );
+
+2 rows updated.
+
+SQL> 
+SQL> -- </3.1.5>
+SQL> --
+SQL> --      Frage: Worauf muss geachtet werden, wenn die lv_nr der
+SQL> --		Lehrveranstaltung ermittelt wird?
+SQL> --
+SQL> -- Das die lv_nr aus der Tabelle Lehrveranstaltung verwendet wird.
+SQL> 
+SQL> --
+SQL> --	3.2   Einfügen neuer Datensätze
+SQL> --
+SQL> --      Fügen Sie die folgenden Datensätze ein:
+SQL> --
+SQL> --      Erfassen Sie die neuen Gebäuden "G" und "H", die in der Straße "Grantham-Allee"
+SQL> --      noch ohne Hausnummer stehen. (Anzahl einzufügender Zeilen: 2)
+SQL> --
+SQL> -- <3.2.1>
+SQL> INSERT INTO dbs_tab_gebaeude (
+  2      gebaeude, 
+  3      strasse
+  4  )   
+  5  VALUES (
+  6      'G', 
+  7      'Grantham-Alle'
+  8  );
+
+1 row inserted.
+
+SQL> 
+SQL> INSERT INTO dbs_tab_gebaeude 
+  2  VALUES(
+  3      'H', 
+  4      'Grantham-Alle', 
+  5      null
+  6  );
+
+1 row inserted.
+
+SQL> -- </3.2.1>
+SQL> --
+SQL> --      Die neue Lehrveranstaltung "Objektrelationale Datenbanken" des
+SQL> --      Fachbereichs Informatik soll jeden Mittwoch um 11:45 Uhr
+SQL> --      im Raum 321 des Gebäudes G stattfinden. Dozent ist
+SQL> --      Prof. Becker. (Anzahl einzufügender Zeilen: 2)
+SQL> --
+SQL> --      Frage: Welchen Primärschlüsselwert erhält die
+SQL> --      neue Lehrveranstaltung?
+SQL> --
+SQL> --      Hinweis: Die nächste freie Schlüsselnummer erhält man
+SQL> --      mit „SELECT MAX(<attribut>)+1 FROM <tabelle>“.
+SQL> --
+SQL> --      Frage: In welchen Tabellen muss in welcher Reihenfolge
+SQL> --      eingefügt werden?
+SQL> --
+SQL> --      Frage: Wie lassen sich die Values direkt mit einem
+SQL> --      SELECT-Befehl ermitteln und einfügen?
+SQL> -- <3.2.2>
+SQL> 
+SQL> 
+SQL> -- 1. Lehveranstaltung erstellen
+SQL> INSERT INTO dbs_tab_lehrveranstaltung 
+  2  VALUES(
+  3      (SELECT MAX(lv_nr)+1 FROM dbs_tab_lehrveranstaltung),
+  4      'Objektrelationale Datenbanken', 
+  5      (SELECT  fb_nr FROM dbs_tab_fachbereich WHERE fb_name = 'Informatik')
+  6  );
+
+1 row inserted.
+
+SQL> 
+SQL> -- 2. lv ort erstellen 
+SQL> INSERT INTO dbs_tab_lv_ort 
+  2  VALUES(
+  3      (SELECT MAX(lv_nr) FROM dbs_tab_lehrveranstaltung),
+  4      'Mi', 1145,
+  5      (SELECT gebaeude FROM dbs_tab_gebaeude WHERE gebaeude = 'G'), 
+  6      321
+  7  );
+
+1 row inserted.
+
+SQL> 
+SQL> --INSERT INTO dbs_tab_prof_haelt_lv VALUES(
+SQL> --    (SELECT m.pers_nr 
+SQL> --       FROM        dbs_tab_mitarbeiter m 
+SQL> --       INNER JOIN  dbs_tab_hochschulangehoeriger h ON m.ho_nr = h.ho_nr
+SQL> --        WHERE       h.ho_name = 'Becker'),
+SQL> --    (SELECT MAX(lv_nr) FROM dbs_tab_lv_ort),
+SQL> --    'Mi',
+SQL> --    321
+SQL> --);
+SQL> -- Wert des Primärschlüssels: 1155
+SQL> 
+SQL> I
+SQL> 
+SQL> -- </3.2.2>
+SQL> --
+SQL> --      Eine neue Lehrkraft wurde an den Fachbereich Informatik
+SQL> --      berufen. Es handelt sich um die Professorin "Dr.
+SQL> --      Roberta Maria Feinbein, 53113 Bonn,
+SQL> --      Hauptstrasse 99". Sie wird mit einem monatlichen Gehalt
+SQL> --      von 5.999 € die Forschung und Lehre des Fachgebiets
+SQL> --      "Rechentechnik" vertreten. Ihre Heimatanschrift lautet
+SQL> --      "Jahnwiese 19, 47051 Duisburg". (Anzahl einzufügender/zu aktualisierender Zeilen: 8)
+SQL> --
+SQL> --      Frage: In welchen Tabellen muss in welcher Reihenfolge
+SQL> --      eingefügt werden?
+SQL> --
+SQL> --      Frage: Wie lasen sich die neuen Primärschlüsselwerte
+SQL> --      ohne "Auto-Increment“ ermitteln?
+SQL> --
+SQL> --      Hinweis: Die nächste freie Schlüsselnummer erhält man
+SQL> --      mit "SELECT MAX(<attribut>)+1 FROM <tabelle>". Leider
+SQL> --      ist die Personalnummer als CHAR(10) kein Datentyp, auf
+SQL> --      dem der "+"-Operator definiert ist. Da aber lediglich
+SQL> --      Ziffernwerte verwendet werden, kann man sich wie folgt
+SQL> --      behelfen, ohne die Konsistenz der Daten zu gefährden:
+SQL> --      "SELECT to_char(MAX(to_number(<attribut>))+1)
+SQL> --      FROM <tabelle>".
+SQL> --
+SQL> -- <3.2.3>
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger 
+  2  VALUES(
+  3      (SELECT MAX(ho_nr)+1 FROM dbs_tab_hochschulangehoeriger),
+  4      'Feinbein'
+  5  );
+
+1 row inserted.
+
+SQL> 
+SQL> INSERT INTO dbs_tab_mitarbeiter 
+  2  VALUES(
+  3      (SELECT to_char(MAX(to_number(pers_nr))+1) FROM dbs_tab_mitarbeiter),
+  4      (SELECT MAX(ho_nr) FROM dbs_tab_hochschulangehoeriger),
+  5      (SELECT  fb_nr FROM dbs_tab_fachbereich WHERE fb_name = 'Informatik'),
+  6      'Forschung und Lehre',
+  7      'Professor',
+  8      5999,
+  9      null
+ 10  );
+
+1 row inserted.
+
+SQL> 
+SQL> INSERT INTO dbs_tab_professor 
+  2  VALUES(
+  3      'Prof. Dr.',
+  4      (SELECT MAX(to_number(pers_nr)) FROM dbs_tab_mitarbeiter),
+  5      'Rechentechnik'
+  6  );
+
+1 row inserted.
+
+SQL> 
+SQL> 
+SQL> INSERT INTO dbs_tab_vorname 
+  2  VALUES(
+  3      (SELECT MAX(ho_nr) FROM dbs_tab_hochschulangehoeriger),
+  4      1,
+  5      'Roberta'    
+  6  );
+
+1 row inserted.
+
+SQL> 
+SQL> INSERT INTO dbs_tab_vorname 
+  2  VALUES(
+  3      (SELECT MAX(ho_nr) FROM dbs_tab_hochschulangehoeriger),
+  4      2,
+  5      'Maria'    
+  6  );
+
+1 row inserted.
+
+SQL> 
+SQL> INSERT INTO dbs_tab_anschrift
+  2  VALUES(
+  3      (SELECT MAX(ho_nr) FROM dbs_tab_hochschulangehoeriger),
+  4      1,
+  5      53113,
+  6      'Bonn',
+  7      'Hauptstrasse',
+  8      '99'
+  9  );
+
+1 row inserted.
+
+SQL> 
+SQL> INSERT INTO dbs_tab_anschrift
+  2  VALUES(
+  3      (SELECT MAX(ho_nr) FROM dbs_tab_hochschulangehoeriger),
+  4      2,
+  5      47051,
+  6      'Duisburg',
+  7      'Jahnwiese',
+  8      '19'
+  9  );
+
+1 row inserted.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </3.2.3>
+SQL> 
+SQL> --
+SQL> --      3.3    Löschen von Datensätzen
+SQL> --
+SQL> --      Löschen Sie die folgenden Datensätze:
+SQL> --
+SQL> --      Löschen Sie das oben eingefügte Gebäude "B", das von keiner
+SQL> --      Lehrveranstaltung belegt wird. (Anzahl zu löschender Zeilen: 1)
+SQL> --
+SQL> -- <3.3.1>
+SQL> DELETE
+  2  FROM    dbs_tab_gebaeude
+  3  WHERE   gebaeude = 'B';
+
+1 row deleted.
+
+SQL> 
+SQL> 
+SQL> -- </3.3.1>
+SQL> --
+SQL> -- 		Der Studierende Leon Barsch, mit der Matr-Nr. 808603 hat sich
+SQL> --      von allen Prüfungen abgemeldet. Löschen sie die aktuellen
+SQL> --      Anmeldungen zu seinen Prüfungen. (Anzahl zu löschender Zeilen: 2)
+SQL> --
+SQL> --		Frage: Wie gehen Sie vor, wenn die Matr-Nr. nicht bekannt ist?
+SQL> --
+SQL> -- <3.3.2>
+SQL> DELETE
+  2  FROM    dbs_tab_pruefung
+  3  WHERE   datum IS NULL AND note IS NULL;
+
+2 rows deleted.
+
+SQL> 
+SQL> 
+SQL> -- </3.3.2>
+SQL> 
+SQL> --
+SQL> --      Der Professor mit der Personalnummer 508322 hat
+SQL> --      gekündigt. (Anzahl zu löschender/aktualisierender Zeilen: 10)
+SQL> --
+SQL> --      Frage: In welchen Tabellen muss gelöscht werden?
+SQL> --
+SQL> --      Frage: Warum ist nicht jede beliebige Löschreihenfolge möglich?
+SQL> --      Weil gewisse Entitäten von anderen Entitäten einen Fremndschlüssel haben
+SQL> --
+SQL> --      Frage: Wie können Sie sich die "ho_nr" merken, ohne sie zu wissen?
+SQL> --      Mit einer Variable und SELECT INTO
+SQL> --
+SQL> -- <3.3.3>
+SQL> -- die lehrveranstaltungen, welcher der Professor hält (indem fall keine)
+SQL> --DELETE
+SQL> --FROM    dbs_tab_prof_haelt_lv
+SQL> --WHERE   pers_nr = 508322;
+SQL> -- 1. lösche prof
+SQL> 
+SQL> DELETE
+  2  FROM    dbs_tab_professor
+  3  WHERE   pers_nr = 508322;
+
+1 row deleted.
+
+SQL> 
+SQL> --lösche chef_nr
+SQL> UPDATE  dbs_tab_mitarbeiter
+  2  SET     chef_nr = NULL
+  3  WHERE   chef_nr = 508322;
+
+5 rows updated.
+
+SQL> 
+SQL> -- lösche vornamen
+SQL> DELETE 
+  2  FROM    dbs_tab_vorname
+  3  WHERE   ho_nr in (
+  4      SELECT  ho_nr
+  5      FROM    dbs_tab_mitarbeiter
+  6      WHERE   pers_nr = 508322
+  7  );
+
+1 row deleted.
+
+SQL> 
+SQL> -- lösche anschrift
+SQL> DELETE 
+  2  FROM    dbs_tab_anschrift
+  3  WHERE   ho_nr in (
+  4      SELECT  ho_nr
+  5      FROM    dbs_tab_mitarbeiter
+  6      WHERE   pers_nr = 508322
+  7  );
+
+1 row deleted.
+
+SQL> 
+SQL> -- lösche mitarbeiter
+SQL> DELETE
+  2  FROM    dbs_tab_mitarbeiter
+  3  WHERE   pers_nr = 508322;
+
+1 row deleted.
+
+SQL> 
+SQL> -- lösche hochschulangehoeriger
+SQL> DELETE 
+  2  FROM    dbs_tab_hochschulangehoeriger
+  3  WHERE   ho_nr in (
+  4      1015
+  5  );
+
+1 row deleted.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </3.3.3>
+SQL> 
+SQL> --
+SQL> --      Die Lehrveranstaltung "Statistik" ist gestrichen worden. (Anzahl zu löschender Zeilen: 5)
+SQL> --
+SQL> -- <3.3.4>
+SQL> 
+SQL> DELETE
+  2  FROM    dbs_tab_prof_haelt_lv
+  3  WHERE   lv_nr = (
+  4      SELECT  lv_nr 
+  5      FROM    dbs_tab_lehrveranstaltung
+  6      WHERE   lv_name = 'Statistik'
+  7  );
+
+2 rows deleted.
+
+SQL> 
+SQL> DELETE
+  2  FROM    dbs_tab_lv_ort
+  3  WHERE   lv_nr = (
+  4      SELECT  lv_nr 
+  5      FROM    dbs_tab_lehrveranstaltung
+  6      WHERE   lv_name = 'Statistik'
+  7  );
+
+2 rows deleted.
+
+SQL> 
+SQL> DELETE
+  2  FROM    dbs_tab_lehrveranstaltung
+  3  WHERE   lv_name = 'Statistik';
+
+1 row deleted.
+
+SQL> 
+SQL> 
+SQL> -- </3.3.4>
+SQL> 
+SQL> --
+SQL> -- Systemdatum
+SQL> --
+SQL>   SELECT user,
+  2           TO_CHAR(SYSDATE, 'dd-mm-yy hh24:mi:ss')
+  3    FROM   dual
+  4  ;
+
+USER                           TO_CHAR(SYSDATE,'
+------------------------------ -----------------
+VKOWAL2S                       15-01-24 23:35:05
+
+SQL> --
+SQL> --
+SQL> spool off

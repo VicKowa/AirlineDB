@@ -1,0 +1,2596 @@
+SQL> 
+SQL> -- Conceptual Section 
+SQL> -- _________________________________
+SQL> 
+SQL> start ./dbs_concept.sql
+SQL> -- ***************************************************************
+SQL> -- * File Name:                  dbs_concept.sql                 *
+SQL> -- * File Creator:               Knolle                          *
+SQL> -- * Revision:                                                   *
+SQL> -- * LastDate:                   5.12.2022                       *
+SQL> -- *                                                             *
+SQL> -- * <ChangeLogDate>             <ChangeLogText>                 *
+SQL> -- ***************************************************************
+SQL> 
+SQL> -- ***************************************************************
+SQL> -- * SQL*plus Job Control Section
+SQL> 
+SQL> set echo on
+SQL> set linesize 80
+SQL> set pagesize 50
+SQL> --spool dbs_concept.log
+SQL> 
+SQL> -- ***************************************************************
+SQL> -- * Clear Database Section
+SQL> 
+SQL> DROP TABLE dbs_tab_anschrift 
+  2  	CASCADE CONSTRAINTS
+  3  ;
+
+Table DBS_TAB_ANSCHRIFT dropped.
+
+SQL> DROP TABLE dbs_tab_fachbereich 
+  2  	CASCADE CONSTRAINTS
+  3  ;
+
+Table DBS_TAB_FACHBEREICH dropped.
+
+SQL> DROP TABLE dbs_tab_gebaeude 
+  2  	CASCADE CONSTRAINTS
+  3  ;
+
+Table DBS_TAB_GEBAEUDE dropped.
+
+SQL> DROP TABLE dbs_tab_hochschulangehoeriger 
+  2  	CASCADE CONSTRAINTS
+  3  ;
+
+Table DBS_TAB_HOCHSCHULANGEHOERIGER dropped.
+
+SQL> DROP TABLE dbs_tab_lv_ort 
+  2  	CASCADE CONSTRAINTS
+  3  ;
+
+Table DBS_TAB_LV_ORT dropped.
+
+SQL> DROP TABLE dbs_tab_mitarbeiter 
+  2  	CASCADE CONSTRAINTS
+  3  ;
+
+Table DBS_TAB_MITARBEITER dropped.
+
+SQL> DROP TABLE dbs_tab_lehrveranstaltung 
+  2  	CASCADE CONSTRAINTS
+  3  ;
+
+Table DBS_TAB_LEHRVERANSTALTUNG dropped.
+
+SQL> DROP TABLE dbs_tab_prof_haelt_lv 
+  2  	CASCADE CONSTRAINTS
+  3  ;
+
+Table DBS_TAB_PROF_HAELT_LV dropped.
+
+SQL> DROP TABLE dbs_tab_professor 
+  2  	CASCADE CONSTRAINTS
+  3  ;
+
+Table DBS_TAB_PROFESSOR dropped.
+
+SQL> DROP TABLE dbs_tab_student 
+  2  	CASCADE CONSTRAINTS
+  3  ;
+
+Table DBS_TAB_STUDENT dropped.
+
+SQL> DROP TABLE dbs_tab_vorname 
+  2  	CASCADE CONSTRAINTS
+  3  ;
+
+Table DBS_TAB_VORNAME dropped.
+
+SQL> DROP TABLE dbs_tab_pruefung 
+  2  	CASCADE CONSTRAINTS
+  3  ;
+
+Table DBS_TAB_PRUEFUNG dropped.
+
+SQL> 
+SQL> -- ***************************************************************
+SQL> -- * Table Section
+SQL> 
+SQL> CREATE TABLE dbs_tab_anschrift
+  2      ( ho_nr 		NUMERIC(4)
+  3      , an_nr 		NUMERIC(1)
+  4      , plz       	NUMERIC(5)
+  5      , ort			VARCHAR(30)
+  6      , strasse		VARCHAR(30)
+  7      , haus_nr		CHAR(5)
+  8  	)
+  9  ;
+
+Table DBS_TAB_ANSCHRIFT created.
+
+SQL> CREATE TABLE dbs_tab_fachbereich
+  2      ( fb_nr 		CHAR(1)
+  3      , fb_name		VARCHAR(30)
+  4      , dekan 		CHAR(10)
+  5      )
+  6  ;
+
+Table DBS_TAB_FACHBEREICH created.
+
+SQL> CREATE TABLE dbs_tab_gebaeude
+  2      ( gebaeude		CHAR(1)
+  3      , strasse		VARCHAR(30)
+  4      , haus_nr		CHAR(5)
+  5      )
+  6  ;
+
+Table DBS_TAB_GEBAEUDE created.
+
+SQL> CREATE TABLE dbs_tab_hochschulangehoeriger
+  2      ( ho_nr			NUMERIC(4)
+  3      , ho_name		VARCHAR(30)
+  4      )
+  5  ;
+
+Table DBS_TAB_HOCHSCHULANGEHOERIGER created.
+
+SQL> CREATE TABLE dbs_tab_lv_ort 
+  2      ( lv_nr			NUMERIC(5)
+  3      , tag			CHAR(2)
+  4      , zeit			CHAR(5)
+  5      , gebaeude		CHAR(1)
+  6      , raum			CHAR(5)
+  7      )
+  8  ;
+
+Table DBS_TAB_LV_ORT created.
+
+SQL> CREATE TABLE dbs_tab_mitarbeiter
+  2      ( pers_Nr		CHAR(10)
+  3      , ho_nr			NUMERIC(4)
+  4      , fb_nr			CHAR(1)
+  5      , institution	VARCHAR(30)
+  6      , beruf			VARCHAR(30)
+  7      , gehalt		NUMERIC(6,2)
+  8  	, chef_nr		CHAR(10)
+  9      )
+ 10  ;
+
+Table DBS_TAB_MITARBEITER created.
+
+SQL> CREATE TABLE dbs_tab_lehrveranstaltung 
+  2      ( lv_nr			NUMERIC(5)
+  3      , lv_name		VARCHAR(30)
+  4      , fb_Nr			CHAR(1)
+  5      )
+  6  ;
+
+Table DBS_TAB_LEHRVERANSTALTUNG created.
+
+SQL> CREATE TABLE dbs_tab_prof_haelt_lv 
+  2      ( pers_nr		CHAR(10)
+  3      , lv_nr			NUMERIC(5)
+  4      , tag			CHAR(2)
+  5      , zeit			CHAR(5)
+  6      )
+  7  ;
+
+Table DBS_TAB_PROF_HAELT_LV created.
+
+SQL> CREATE TABLE dbs_tab_professor 
+  2      ( titel			VARCHAR(15)
+  3      , pers_nr		CHAR(10)
+  4      , fachgebiet	VARCHAR(30)
+  5      )
+  6  ;
+
+Table DBS_TAB_PROFESSOR created.
+
+SQL> CREATE TABLE dbs_tab_student 
+  2      ( ho_nr			NUMERIC(4)
+  3      , pers_Nr		CHAR(10)
+  4      , matr_Nr		NUMERIC(10)
+  5      , fb_nr			CHAR(1)
+  6      )
+  7  ;
+
+Table DBS_TAB_STUDENT created.
+
+SQL> CREATE TABLE dbs_tab_vorname 
+  2      ( ho_nr			NUMERIC(4)
+  3      , vo_Nr			NUMERIC(2)
+  4      , vorname		VARCHAR(20)
+  5      )
+  6  ;
+
+Table DBS_TAB_VORNAME created.
+
+SQL> CREATE TABLE dbs_tab_pruefung 
+  2      ( matr_Nr 		NUMERIC(10)
+  3      , lv_nr 		NUMERIC(5)
+  4      , professor		CHAR(10)
+  5      , versuch		NUMERIC(1)
+  6      , datum			DATE
+  7      , note			NUMERIC(2,1)
+  8      )
+  9  ;
+
+Table DBS_TAB_PRUEFUNG created.
+
+SQL> 
+SQL> -- ***************************************************************
+SQL> -- * NOT NULL Constraint Section
+SQL> 
+SQL> ALTER TABLE dbs_tab_anschrift 
+  2  	ADD CONSTRAINT dbs_nn_anschrift_plz
+  3  	CHECK (plz IS NOT NULL)
+  4  ;
+
+Table DBS_TAB_ANSCHRIFT altered.
+
+SQL> ALTER TABLE dbs_tab_anschrift 
+  2  	ADD CONSTRAINT dbs_nn_anschrift_ort
+  3  	CHECK (ort IS NOT NULL)
+  4  ;
+
+Table DBS_TAB_ANSCHRIFT altered.
+
+SQL> ALTER TABLE dbs_tab_anschrift 
+  2  	ADD CONSTRAINT dbs_nn_anschrift_strasse
+  3  	CHECK (strasse IS NOT NULL)
+  4  ;
+
+Table DBS_TAB_ANSCHRIFT altered.
+
+SQL> ALTER TABLE dbs_tab_fachbereich 
+  2  	ADD CONSTRAINT dbs_nn_fachbereich_dekan
+  3  	CHECK (dekan IS NOT NULL)
+  4  ;
+
+Table DBS_TAB_FACHBEREICH altered.
+
+SQL> ALTER TABLE dbs_tab_fachbereich 
+  2  	ADD CONSTRAINT dbs_nn_fb_name
+  3  	CHECK (fb_name IS NOT NULL)
+  4  ;
+
+Table DBS_TAB_FACHBEREICH altered.
+
+SQL> ALTER TABLE dbs_tab_gebaeude 
+  2  	ADD CONSTRAINT dbs_nn_gebaeude_strasse
+  3  	CHECK (strasse IS NOT NULL)
+  4  ;
+
+Table DBS_TAB_GEBAEUDE altered.
+
+SQL> ALTER TABLE dbs_tab_hochschulangehoeriger 
+  2  	ADD CONSTRAINT dbs_nn_hochschulang_ho_name
+  3  	CHECK (ho_name IS NOT NULL)
+  4  ;
+
+Table DBS_TAB_HOCHSCHULANGEHOERIGER altered.
+
+SQL> ALTER TABLE dbs_tab_mitarbeiter 
+  2  	ADD CONSTRAINT dbs_nn_mitarbeiter_institution
+  3  	CHECK (institution IS NOT NULL)
+  4  ;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE dbs_tab_mitarbeiter 
+  2  	ADD CONSTRAINT dbs_nn_mitarbeiter_beruf
+  3  	CHECK (beruf IS NOT NULL)
+  4  ;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE dbs_tab_mitarbeiter 
+  2  	ADD CONSTRAINT dbs_nn_mitarbeiter_gehalt
+  3  	CHECK (gehalt IS NOT NULL)
+  4  ;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE dbs_tab_lehrveranstaltung 
+  2  	ADD CONSTRAINT dbs_nn_lehrveranst_lv_name
+  3  	CHECK (lv_name IS NOT NULL)
+  4  ;
+
+Table DBS_TAB_LEHRVERANSTALTUNG altered.
+
+SQL> ALTER TABLE dbs_tab_lehrveranstaltung 
+  2  	ADD CONSTRAINT dbs_nn_lehrveranstaltung_fb_nr
+  3  	CHECK (fb_nr IS NOT NULL)
+  4  ;
+
+Table DBS_TAB_LEHRVERANSTALTUNG altered.
+
+SQL> ALTER TABLE dbs_tab_professor 
+  2  	ADD CONSTRAINT dbs_nn_professor_titel
+  3  	CHECK (titel IS NOT NULL)
+  4  ;
+
+Table DBS_TAB_PROFESSOR altered.
+
+SQL> ALTER TABLE dbs_tab_professor 
+  2  	ADD CONSTRAINT dbs_nn_professor_fachgebiet
+  3  	CHECK (fachgebiet IS NOT NULL)
+  4  ;
+
+Table DBS_TAB_PROFESSOR altered.
+
+SQL> ALTER TABLE dbs_tab_student 
+  2  	ADD CONSTRAINT dbs_nn_student_ho_nr
+  3  	CHECK (ho_nr IS NOT NULL)
+  4  ;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE dbs_tab_student 
+  2  	ADD CONSTRAINT dbs_nn_student_fb_nr
+  3  	CHECK (fb_nr IS NOT NULL)
+  4  ;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE dbs_tab_vorname 
+  2  	ADD CONSTRAINT dbs_nn_vorname_vorname
+  3  	CHECK (vorname IS NOT NULL)
+  4  ;
+
+Table DBS_TAB_VORNAME altered.
+
+SQL> 
+SQL> -- ***************************************************************
+SQL> -- * Primary Key Constraint Section
+SQL> 
+SQL> ALTER TABLE dbs_tab_anschrift 
+  2  	ADD CONSTRAINT dbs_pk_anschrift 
+  3  	PRIMARY KEY (ho_nr, an_nr)
+  4  ;
+
+Table DBS_TAB_ANSCHRIFT altered.
+
+SQL> ALTER TABLE dbs_tab_fachbereich 
+  2  	ADD CONSTRAINT dbs_pk_fachbereich 
+  3  	PRIMARY KEY (fb_nr)
+  4  ;
+
+Table DBS_TAB_FACHBEREICH altered.
+
+SQL> ALTER TABLE dbs_tab_gebaeude 
+  2  	ADD CONSTRAINT dbs_pk_gebaeude 
+  3  	PRIMARY KEY (gebaeude)
+  4  ;
+
+Table DBS_TAB_GEBAEUDE altered.
+
+SQL> ALTER TABLE dbs_tab_hochschulangehoeriger 
+  2  	ADD CONSTRAINT dbs_pk_hochschulangehoeriger 
+  3  	PRIMARY KEY (ho_nr)
+  4  ;
+
+Table DBS_TAB_HOCHSCHULANGEHOERIGER altered.
+
+SQL> ALTER TABLE dbs_tab_lv_ort 
+  2  	ADD CONSTRAINT dbs_pk_lv_ort_ID 
+  3  	PRIMARY KEY (lv_nr, tag, zeit)
+  4  ;
+
+Table DBS_TAB_LV_ORT altered.
+
+SQL> ALTER TABLE dbs_tab_mitarbeiter 
+  2  	ADD CONSTRAINT dbs_pk_mitarbeiter 
+  3  	PRIMARY KEY (pers_Nr)
+  4  ;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE dbs_tab_lehrveranstaltung 
+  2  	ADD CONSTRAINT dbs_pk_lehrveranstaltung 
+  3  	PRIMARY KEY (lv_nr)
+  4  ;
+
+Table DBS_TAB_LEHRVERANSTALTUNG altered.
+
+SQL> ALTER TABLE dbs_tab_prof_haelt_lv 
+  2  	ADD CONSTRAINT dbs_pk_prof_haelt_lv 
+  3  	PRIMARY KEY (pers_Nr, lv_nr, tag, zeit)
+  4  ;
+
+Table DBS_TAB_PROF_HAELT_LV altered.
+
+SQL> ALTER TABLE dbs_tab_professor 
+  2  	ADD CONSTRAINT dbs_pk_professor 
+  3  	PRIMARY KEY (pers_Nr)
+  4  ;
+
+Table DBS_TAB_PROFESSOR altered.
+
+SQL> ALTER TABLE dbs_tab_student 
+  2  	ADD CONSTRAINT dbs_pk_student 
+  3  	PRIMARY KEY (matr_Nr)
+  4  ;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE dbs_tab_vorname 
+  2  	ADD CONSTRAINT dbs_pk_vorname 
+  3  	PRIMARY KEY (ho_nr, vo_Nr)
+  4  ;
+
+Table DBS_TAB_VORNAME altered.
+
+SQL> ALTER TABLE dbs_tab_pruefung 
+  2  	ADD CONSTRAINT dbs_pk_pruefung 
+  3  	PRIMARY KEY (matr_Nr, lv_nr, professor, versuch)
+  4  ;
+
+Table DBS_TAB_PRUEFUNG altered.
+
+SQL> 
+SQL> -- ***************************************************************
+SQL> -- * Unique Key Constraint Section
+SQL> 
+SQL> ALTER TABLE dbs_tab_student 
+  2  	ADD CONSTRAINT dbs_uk_student_pers 
+  3  	UNIQUE (pers_nr)
+  4  ;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE dbs_tab_student 
+  2  	ADD CONSTRAINT dbs_uk_student_ho 
+  3  	UNIQUE (ho_nr)
+  4  ;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE dbs_tab_mitarbeiter 
+  2  	ADD CONSTRAINT dbs_uk_mitarbeiter_ho 
+  3  	UNIQUE (ho_nr)
+  4  ;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> 
+SQL> -- ***************************************************************
+SQL> -- * Foreign Key Constraint Section
+SQL> 
+SQL> ALTER TABLE dbs_tab_anschrift 
+  2    ADD CONSTRAINT dbs_fk_anschrift_hochschulang
+  3    FOREIGN KEY (ho_nr)
+  4    REFERENCES dbs_tab_hochschulangehoeriger
+  5  ;
+
+Table DBS_TAB_ANSCHRIFT altered.
+
+SQL> ALTER TABLE dbs_tab_fachbereich 
+  2    ADD CONSTRAINT dbs_fk_fachbereich_mitarbeiter
+  3    FOREIGN KEY (dekan)
+  4    REFERENCES dbs_tab_professor
+  5  ;
+
+Table DBS_TAB_FACHBEREICH altered.
+
+SQL> ALTER TABLE dbs_tab_lv_ort 
+  2    ADD CONSTRAINT dbs_fk_lv_ort_gebaeude
+  3    FOREIGN KEY (gebaeude)
+  4    REFERENCES dbs_tab_gebaeude
+  5  ;
+
+Table DBS_TAB_LV_ORT altered.
+
+SQL> ALTER TABLE dbs_tab_lv_ort 
+  2    ADD CONSTRAINT dbs_fk_lv_ort_lehrveranst
+  3    FOREIGN KEY (lv_nr)
+  4    REFERENCES dbs_tab_lehrveranstaltung
+  5  ;
+
+Table DBS_TAB_LV_ORT altered.
+
+SQL> ALTER TABLE dbs_tab_mitarbeiter 
+  2    ADD CONSTRAINT dbs_fk_mirarbeiter_fachbereich
+  3    FOREIGN KEY (fb_Nr)
+  4    REFERENCES dbs_tab_fachbereich
+  5  ;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE dbs_tab_mitarbeiter 
+  2    ADD CONSTRAINT dbs_fk_mitarb_hochschulang
+  3    FOREIGN KEY (ho_nr)
+  4    REFERENCES dbs_tab_hochschulangehoeriger
+  5  ;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE dbs_tab_mitarbeiter 
+  2    ADD CONSTRAINT dbs_fk_mitarbeiter_mitarbeiter
+  3    FOREIGN KEY (chef_nr)
+  4    REFERENCES dbs_tab_mitarbeiter
+  5  ;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE dbs_tab_lehrveranstaltung 
+  2    ADD CONSTRAINT dbs_fk_lehrveranst_fachbereich
+  3    FOREIGN KEY (fb_nr)
+  4    REFERENCES dbs_tab_fachbereich
+  5  ;
+
+Table DBS_TAB_LEHRVERANSTALTUNG altered.
+
+SQL> ALTER TABLE dbs_tab_prof_haelt_lv 
+  2    ADD CONSTRAINT dbs_fk_prof_haelt_lv_professor
+  3    FOREIGN KEY (pers_nr)
+  4    REFERENCES dbs_tab_professor
+  5  ;
+
+Table DBS_TAB_PROF_HAELT_LV altered.
+
+SQL> ALTER TABLE dbs_tab_prof_haelt_lv 
+  2    ADD CONSTRAINT dbs_fk_prof_haelt_lv_lv_ort
+  3    FOREIGN KEY (lv_nr, tag, zeit)
+  4    REFERENCES dbs_tab_lv_ort
+  5  ;
+
+Table DBS_TAB_PROF_HAELT_LV altered.
+
+SQL> ALTER TABLE dbs_tab_professor 
+  2    ADD CONSTRAINT dbs_fk_professor_mitarbeiter
+  3    FOREIGN KEY (pers_Nr)
+  4    REFERENCES dbs_tab_mitarbeiter
+  5  ;
+
+Table DBS_TAB_PROFESSOR altered.
+
+SQL> ALTER TABLE dbs_tab_student 
+  2    ADD CONSTRAINT dbs_fk_student_hochschulang
+  3    FOREIGN KEY (ho_nr)
+  4    REFERENCES dbs_tab_hochschulangehoeriger
+  5  ;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE dbs_tab_student 
+  2    ADD CONSTRAINT dbs_fk_student_mitarbeiter
+  3    FOREIGN KEY (pers_Nr)
+  4    REFERENCES dbs_tab_mitarbeiter
+  5  ;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE dbs_tab_student 
+  2    ADD CONSTRAINT dbs_fk_student_fachbereich
+  3    FOREIGN KEY (fb_nr)
+  4    REFERENCES dbs_tab_fachbereich
+  5  ;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE dbs_tab_vorname 
+  2    ADD CONSTRAINT dbs_fk_vorname_hochschulang
+  3    FOREIGN KEY (ho_nr)
+  4    REFERENCES dbs_tab_hochschulangehoeriger
+  5  ;
+
+Table DBS_TAB_VORNAME altered.
+
+SQL> ALTER TABLE dbs_tab_pruefung 
+  2    ADD CONSTRAINT dbs_fk_pruefung_lehrveranst
+  3    FOREIGN KEY (lv_nr)
+  4    REFERENCES dbs_tab_lehrveranstaltung
+  5  ;
+
+Table DBS_TAB_PRUEFUNG altered.
+
+SQL> ALTER TABLE dbs_tab_pruefung 
+  2    ADD CONSTRAINT dbs_fk_pruefung_professor
+  3    FOREIGN KEY (professor)
+  4    REFERENCES dbs_tab_professor
+  5  ;
+
+Table DBS_TAB_PRUEFUNG altered.
+
+SQL> ALTER TABLE dbs_tab_pruefung 
+  2    ADD CONSTRAINT dbs_fk_pruefung_student
+  3    FOREIGN KEY (matr_NR)
+  4    REFERENCES dbs_tab_student
+  5  ;
+
+Table DBS_TAB_PRUEFUNG altered.
+
+SQL> 
+SQL> 
+SQL> -- ***************************************************************
+SQL> -- * Integrity Check Constraint Section
+SQL> 
+SQL> -- things to do ... something like this 
+SQL> -- ... but subqueries are not allowed here:
+SQL> 
+SQL> -- ALTER TABLE dbs_tab_fachbereich 
+SQL> -- 	 ADD CONSTRAINT dbs_chk_mitarbeiter
+SQL> --   CHECK	( EXISTS	( SELECT * 
+SQL> -- 						  FROM dbs_tab_mitarbeiter
+SQL> -- 						  WHERE dbs_tab_mitarbeiter.fb_Nr = fb_nr
+SQL> -- 						)
+SQL> -- 			)
+SQL> -- ; 
+SQL> -- ALTER TABLE dbs_tab_hochschulangehoeriger 
+SQL> -- 	 ADD CONSTRAINT dbs_chk_vorname
+SQL> --   CHECK	(	EXISTS	( SELECT * 
+SQL> -- 						  FROM dbs_tab_vorname
+SQL> -- 						  WHERE dbs_tab_vorname.ho_nr = ho_nr
+SQL> -- 						)
+SQL> -- 			)
+SQL> -- ; 
+SQL> -- ALTER TABLE dbs_tab_hochschulangehoeriger 
+SQL> --   ADD CONSTRAINT dbs_chk_anschrit
+SQL> --   CHECK	( EXISTS	( SELECT * 
+SQL> -- 						  FROM dbs_tab_anschrift
+SQL> -- 						  WHERE dbs_tab_anschrift.ho_nr = ho_nr
+SQL> -- 						)
+SQL> -- 			)
+SQL> -- ; 
+SQL> -- 
+SQL> -- ***************************************************************
+SQL> -- * SQL*plus Job Control Section
+SQL> 
+SQL> --spool off
+SQL> 
+SQL> 
+SQL> -- Test Conceptual Section 
+SQL> -- _________________________________
+SQL> 
+SQL> start ./dbs_test_concept.sql
+SQL> -- ***************************************************************
+SQL> -- * File Name:                  dbs_test_concept.sql            *
+SQL> -- * File Creator:               Knolle                          *
+SQL> -- * Revision:                                                   *
+SQL> -- * LastDate:                   5.12.2022                       *
+SQL> -- *                                                             *
+SQL> -- * <ChangeLogDate>             <ChangeLogText>                 *
+SQL> -- ***************************************************************
+SQL> 
+SQL> -- ***************************************************************
+SQL> -- * SQL*plus Job Control Section
+SQL> 
+SQL> set echo on
+SQL> set linesize 80
+SQL> set pagesize 50
+SQL> --spool dbs_test_concept.log
+SQL> 
+SQL> 
+SQL> DESCRIBE user_tables;
+Name                      Null?    Type          
+------------------------- -------- ------------- 
+TABLE_NAME                NOT NULL VARCHAR2(128) 
+TABLESPACE_NAME                    VARCHAR2(30)  
+CLUSTER_NAME                       VARCHAR2(128) 
+IOT_NAME                           VARCHAR2(128) 
+STATUS                             VARCHAR2(8)   
+PCT_FREE                           NUMBER        
+PCT_USED                           NUMBER        
+INI_TRANS                          NUMBER        
+MAX_TRANS                          NUMBER        
+INITIAL_EXTENT                     NUMBER        
+NEXT_EXTENT                        NUMBER        
+MIN_EXTENTS                        NUMBER        
+MAX_EXTENTS                        NUMBER        
+PCT_INCREASE                       NUMBER        
+FREELISTS                          NUMBER        
+FREELIST_GROUPS                    NUMBER        
+LOGGING                            VARCHAR2(3)   
+BACKED_UP                          VARCHAR2(1)   
+NUM_ROWS                           NUMBER        
+BLOCKS                             NUMBER        
+EMPTY_BLOCKS                       NUMBER        
+AVG_SPACE                          NUMBER        
+CHAIN_CNT                          NUMBER        
+AVG_ROW_LEN                        NUMBER        
+AVG_SPACE_FREELIST_BLOCKS          NUMBER        
+NUM_FREELIST_BLOCKS                NUMBER        
+DEGREE                             VARCHAR2(40)  
+INSTANCES                          VARCHAR2(40)  
+CACHE                              VARCHAR2(20)  
+TABLE_LOCK                         VARCHAR2(8)   
+SAMPLE_SIZE                        NUMBER        
+LAST_ANALYZED                      DATE          
+PARTITIONED                        VARCHAR2(3)   
+IOT_TYPE                           VARCHAR2(12)  
+TEMPORARY                          VARCHAR2(1)   
+SECONDARY                          VARCHAR2(1)   
+NESTED                             VARCHAR2(3)   
+BUFFER_POOL                        VARCHAR2(7)   
+FLASH_CACHE                        VARCHAR2(7)   
+CELL_FLASH_CACHE                   VARCHAR2(7)   
+ROW_MOVEMENT                       VARCHAR2(8)   
+GLOBAL_STATS                       VARCHAR2(3)   
+USER_STATS                         VARCHAR2(3)   
+DURATION                           VARCHAR2(15)  
+SKIP_CORRUPT                       VARCHAR2(8)   
+MONITORING                         VARCHAR2(3)   
+CLUSTER_OWNER                      VARCHAR2(128) 
+DEPENDENCIES                       VARCHAR2(8)   
+COMPRESSION                        VARCHAR2(8)   
+COMPRESS_FOR                       VARCHAR2(30)  
+DROPPED                            VARCHAR2(3)   
+READ_ONLY                          VARCHAR2(3)   
+SEGMENT_CREATED                    VARCHAR2(3)   
+RESULT_CACHE                       VARCHAR2(7)   
+CLUSTERING                         VARCHAR2(3)   
+ACTIVITY_TRACKING                  VARCHAR2(23)  
+DML_TIMESTAMP                      VARCHAR2(25)  
+HAS_IDENTITY                       VARCHAR2(3)   
+CONTAINER_DATA                     VARCHAR2(3)   
+SQL> 
+SQL> SELECT table_name 
+  2  	FROM user_tables
+  3  	WHERE table_name LIKE 'DBS_TAB%'
+  4  ;
+
+TABLE_NAME                                                                      
+--------------------------------------------------------------------------------
+DBS_TAB_ANSCHRIFT
+DBS_TAB_FACHBEREICH
+DBS_TAB_GEBAEUDE
+DBS_TAB_HOCHSCHULANGEHOERIGER
+DBS_TAB_LEHRVERANSTALTUNG
+DBS_TAB_LV_ORT
+DBS_TAB_MITARBEITER
+DBS_TAB_PROFESSOR
+DBS_TAB_PROF_HAELT_LV
+DBS_TAB_PRUEFUNG
+DBS_TAB_STUDENT
+DBS_TAB_VORNAME
+
+12 rows selected. 
+
+SQL> 
+SQL> DESCRIBE dbs_tab_ANSCHRIFT;
+Name    Null?    Type         
+------- -------- ------------ 
+HO_NR   NOT NULL NUMBER(4)    
+AN_NR   NOT NULL NUMBER(1)    
+PLZ              NUMBER(5)    
+ORT              VARCHAR2(30) 
+STRASSE          VARCHAR2(30) 
+HAUS_NR          CHAR(5)      
+SQL> DESCRIBE dbs_tab_FACHBEREICH;
+Name    Null?    Type         
+------- -------- ------------ 
+FB_NR   NOT NULL CHAR(1)      
+FB_NAME          VARCHAR2(30) 
+DEKAN            CHAR(10)     
+SQL> DESCRIBE dbs_tab_GEBAEUDE;
+Name     Null?    Type         
+-------- -------- ------------ 
+GEBAEUDE NOT NULL CHAR(1)      
+STRASSE           VARCHAR2(30) 
+HAUS_NR           CHAR(5)      
+SQL> DESCRIBE dbs_tab_HOCHSCHULANGEHOERIGER;
+Name    Null?    Type         
+------- -------- ------------ 
+HO_NR   NOT NULL NUMBER(4)    
+HO_NAME          VARCHAR2(30) 
+SQL> DESCRIBE dbs_tab_LV_ORT;
+Name     Null?    Type      
+-------- -------- --------- 
+LV_NR    NOT NULL NUMBER(5) 
+TAG      NOT NULL CHAR(2)   
+ZEIT     NOT NULL CHAR(5)   
+GEBAEUDE          CHAR(1)   
+RAUM              CHAR(5)   
+SQL> DESCRIBE dbs_tab_MITARBEITER;
+Name        Null?    Type         
+----------- -------- ------------ 
+PERS_NR     NOT NULL CHAR(10)     
+HO_NR                NUMBER(4)    
+FB_NR                CHAR(1)      
+INSTITUTION          VARCHAR2(30) 
+BERUF                VARCHAR2(30) 
+GEHALT               NUMBER(6,2)  
+CHEF_NR              CHAR(10)     
+SQL> DESCRIBE dbs_tab_LEHRVERANSTALTUNG;
+Name    Null?    Type         
+------- -------- ------------ 
+LV_NR   NOT NULL NUMBER(5)    
+LV_NAME          VARCHAR2(30) 
+FB_NR            CHAR(1)      
+SQL> DESCRIBE dbs_tab_PROF_HAELT_LV;
+Name    Null?    Type      
+------- -------- --------- 
+PERS_NR NOT NULL CHAR(10)  
+LV_NR   NOT NULL NUMBER(5) 
+TAG     NOT NULL CHAR(2)   
+ZEIT    NOT NULL CHAR(5)   
+SQL> DESCRIBE dbs_tab_PROFESSOR;
+Name       Null?    Type         
+---------- -------- ------------ 
+TITEL               VARCHAR2(15) 
+PERS_NR    NOT NULL CHAR(10)     
+FACHGEBIET          VARCHAR2(30) 
+SQL> DESCRIBE dbs_tab_STUDENT;
+Name    Null?    Type       
+------- -------- ---------- 
+HO_NR            NUMBER(4)  
+PERS_NR          CHAR(10)   
+MATR_NR NOT NULL NUMBER(10) 
+FB_NR            CHAR(1)    
+SQL> DESCRIBE dbs_tab_VORNAME;
+Name    Null?    Type         
+------- -------- ------------ 
+HO_NR   NOT NULL NUMBER(4)    
+VO_NR   NOT NULL NUMBER(2)    
+VORNAME          VARCHAR2(20) 
+SQL> DESCRIBE dbs_tab_PRUEFUNG;
+Name      Null?    Type        
+--------- -------- ----------- 
+MATR_NR   NOT NULL NUMBER(10)  
+LV_NR     NOT NULL NUMBER(5)   
+PROFESSOR NOT NULL CHAR(10)    
+VERSUCH   NOT NULL NUMBER(1)   
+DATUM              DATE        
+NOTE               NUMBER(2,1) 
+SQL> 
+SQL> -- ***************************************************************
+SQL> -- * SQL*plus Job Control Section
+SQL> 
+SQL> --spool off
+SQL> 
+SQL> 
+SQL> -- Internal Section 
+SQL> -- _________________________________
+SQL> 
+SQL> start ./dbs_intern.sql
+SQL> -- ***************************************************************
+SQL> -- * File Name:                  dbs_intern.sql                  *
+SQL> -- * File Creator:               Knolle                          *
+SQL> -- * Revision:                                                   *
+SQL> -- * LastDate:                   5.12.2022                       *
+SQL> -- *                                                             *
+SQL> -- * <ChangeLogDate>             <ChangeLogText>                 *
+SQL> -- ***************************************************************
+SQL> 
+SQL> -- ***************************************************************
+SQL> -- * SQL*plus Job Control Section
+SQL> 
+SQL> set echo on
+SQL> set linesize 80
+SQL> set pagesize 50
+SQL> --spool dbs_intern.log
+SQL> 
+SQL> 
+SQL> -- Index Section
+SQL> -- _____________
+SQL> 
+SQL> create index dbs_id_anschrift_ho_nr
+  2    	  on dbs_tab_anschrift (ho_nr)
+  3  ;
+
+Index DBS_ID_ANSCHRIFT_HO_NR created.
+
+SQL> create index dbs_id_fachbereich_dekan
+  2    	  on dbs_tab_Fachbereich (dekan)
+  3  ;
+
+Index DBS_ID_FACHBEREICH_DEKAN created.
+
+SQL> 
+SQL> create index dbs_id_lv_ort_gebaeude
+  2    	  on dbs_tab_lv_ort (gebaeude)
+  3  ;
+
+Index DBS_ID_LV_ORT_GEBAEUDE created.
+
+SQL> create index dbs_id_lv_ort_lv_nr
+  2    	  on dbs_tab_lv_ort (lv_nr)
+  3  ;
+
+Index DBS_ID_LV_ORT_LV_NR created.
+
+SQL> create index dbs_id_mitarbeiter_fb_nr
+  2    	  on dbs_tab_mitarbeiter (fb_nr)
+  3  ;
+
+Index DBS_ID_MITARBEITER_FB_NR created.
+
+SQL> 
+SQL> create index dbs_id_lehrveranstaltung_fb_nr
+  2    	  on dbs_tab_lehrveranstaltung (fb_nr)
+  3  ;
+
+Index DBS_ID_LEHRVERANSTALTUNG_FB_NR created.
+
+SQL> create index dbs_id_prof_haelt_lv_pers_nr
+  2    	  on dbs_tab_prof_haelt_LV (pers_Nr)
+  3  ;
+
+Index DBS_ID_PROF_HAELT_LV_PERS_NR created.
+
+SQL> create index dbs_id_prof_haelt_lv_l_t_z
+  2    	  on dbs_tab_prof_haelt_LV (lv_nr, tag, zeit)
+  3  ;
+
+Index DBS_ID_PROF_HAELT_LV_L_T_Z created.
+
+SQL> 
+SQL> create index dbs_id_student_fb_nr
+  2    	  on dbs_tab_student (fb_nr)
+  3  ;
+
+Index DBS_ID_STUDENT_FB_NR created.
+
+SQL> 
+SQL> create index dbs_id_pruefung_matr_nr
+  2    	  on dbs_tab_pruefung (matr_nr)
+  3  ;
+
+Index DBS_ID_PRUEFUNG_MATR_NR created.
+
+SQL> create index dbs_id_vorname_ho_nr
+  2    	  on dbs_tab_vorname (ho_nr)
+  3  ;
+
+Index DBS_ID_VORNAME_HO_NR created.
+
+SQL> 
+SQL> -- ***************************************************************
+SQL> -- * SQL*plus Job Control Section
+SQL> 
+SQL> --spool off
+SQL> 
+SQL> 
+SQL> -- Data Section 
+SQL> -- _________________________________
+SQL> 
+SQL> start ./dbs_data.sql
+SQL> -- ***************************************************************
+SQL> -- * File Name:                  dbs_data.sql                    *
+SQL> -- * File Creator:               Knolle                          *
+SQL> -- * Revision:                                                   *
+SQL> -- * LastDate:                   5.12.2022                       *
+SQL> -- *                                                             *
+SQL> -- * <ChangeLogDate>             <ChangeLogText>                 *
+SQL> -- ***************************************************************
+SQL> 
+SQL> -- ***************************************************************
+SQL> -- * SQL*plus Job Control Section
+SQL> 
+SQL> set echo on
+SQL> set linesize 80
+SQL> set pagesize 50
+SQL> --spool dbs_data.log
+SQL> 
+SQL> 
+SQL> -- Disable Foreign Key Constraint Section
+SQL> -- ______________________________________
+SQL> 
+SQL> ALTER TABLE DBS_TAB_ANSCHRIFT DISABLE CONSTRAINT DBS_FK_ANSCHRIFT_HOCHSCHULANG;
+
+Table DBS_TAB_ANSCHRIFT altered.
+
+SQL> ALTER TABLE DBS_TAB_FACHBEREICH DISABLE CONSTRAINT DBS_FK_FACHBEREICH_MITARBEITER;
+
+Table DBS_TAB_FACHBEREICH altered.
+
+SQL> ALTER TABLE DBS_TAB_LEHRVERANSTALTUNG DISABLE CONSTRAINT DBS_FK_LEHRVERANST_FACHBEREICH;
+
+Table DBS_TAB_LEHRVERANSTALTUNG altered.
+
+SQL> ALTER TABLE DBS_TAB_LV_ORT DISABLE CONSTRAINT DBS_FK_LV_ORT_GEBAEUDE;
+
+Table DBS_TAB_LV_ORT altered.
+
+SQL> ALTER TABLE DBS_TAB_LV_ORT DISABLE CONSTRAINT DBS_FK_LV_ORT_LEHRVERANST;
+
+Table DBS_TAB_LV_ORT altered.
+
+SQL> ALTER TABLE DBS_TAB_MITARBEITER DISABLE CONSTRAINT DBS_FK_MIRARBEITER_FACHBEREICH;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE DBS_TAB_MITARBEITER DISABLE CONSTRAINT DBS_FK_MITARB_HOCHSCHULANG;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE DBS_TAB_MITARBEITER DISABLE CONSTRAINT DBS_FK_MITARBEITER_MITARBEITER;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE DBS_TAB_PROFESSOR DISABLE CONSTRAINT DBS_FK_PROFESSOR_MITARBEITER;
+
+Table DBS_TAB_PROFESSOR altered.
+
+SQL> ALTER TABLE DBS_TAB_PROF_HAELT_LV DISABLE CONSTRAINT DBS_FK_PROF_HAELT_LV_LV_ORT;
+
+Table DBS_TAB_PROF_HAELT_LV altered.
+
+SQL> ALTER TABLE DBS_TAB_PROF_HAELT_LV DISABLE CONSTRAINT DBS_FK_PROF_HAELT_LV_PROFESSOR;
+
+Table DBS_TAB_PROF_HAELT_LV altered.
+
+SQL> ALTER TABLE DBS_TAB_STUDENT DISABLE CONSTRAINT DBS_FK_STUDENT_FACHBEREICH;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE DBS_TAB_STUDENT DISABLE CONSTRAINT DBS_FK_STUDENT_HOCHSCHULANG;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE DBS_TAB_STUDENT DISABLE CONSTRAINT DBS_FK_STUDENT_MITARBEITER;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE DBS_TAB_VORNAME DISABLE CONSTRAINT DBS_FK_VORNAME_HOCHSCHULANG;
+
+Table DBS_TAB_VORNAME altered.
+
+SQL> 
+SQL> ALTER TABLE DBS_TAB_PRUEFUNG DISABLE CONSTRAINT DBS_FK_PRUEFUNG_LEHRVERANST;
+
+Table DBS_TAB_PRUEFUNG altered.
+
+SQL> ALTER TABLE DBS_TAB_PRUEFUNG DISABLE CONSTRAINT DBS_FK_PRUEFUNG_PROFESSOR;
+
+Table DBS_TAB_PRUEFUNG altered.
+
+SQL> ALTER TABLE DBS_TAB_PRUEFUNG DISABLE CONSTRAINT DBS_FK_PRUEFUNG_STUDENT;
+
+Table DBS_TAB_PRUEFUNG altered.
+
+SQL> 
+SQL> 
+SQL> -- Disable Not Null Constraint Section
+SQL> -- ______________________________________
+SQL> 
+SQL> ALTER TABLE DBS_TAB_ANSCHRIFT DISABLE CONSTRAINT DBS_NN_ANSCHRIFT_ORT;
+
+Table DBS_TAB_ANSCHRIFT altered.
+
+SQL> ALTER TABLE DBS_TAB_ANSCHRIFT DISABLE CONSTRAINT DBS_NN_ANSCHRIFT_PLZ;
+
+Table DBS_TAB_ANSCHRIFT altered.
+
+SQL> ALTER TABLE DBS_TAB_ANSCHRIFT DISABLE CONSTRAINT DBS_NN_ANSCHRIFT_STRASSE;
+
+Table DBS_TAB_ANSCHRIFT altered.
+
+SQL> ALTER TABLE DBS_TAB_FACHBEREICH DISABLE CONSTRAINT DBS_NN_FACHBEREICH_DEKAN;
+
+Table DBS_TAB_FACHBEREICH altered.
+
+SQL> ALTER TABLE DBS_TAB_FACHBEREICH DISABLE CONSTRAINT DBS_NN_FB_NAME;
+
+Table DBS_TAB_FACHBEREICH altered.
+
+SQL> ALTER TABLE DBS_TAB_GEBAEUDE DISABLE CONSTRAINT DBS_NN_GEBAEUDE_STRASSE;
+
+Table DBS_TAB_GEBAEUDE altered.
+
+SQL> ALTER TABLE DBS_TAB_HOCHSCHULANGEHOERIGER DISABLE CONSTRAINT DBS_NN_HOCHSCHULANG_HO_NAME;
+
+Table DBS_TAB_HOCHSCHULANGEHOERIGER altered.
+
+SQL> ALTER TABLE DBS_TAB_LEHRVERANSTALTUNG DISABLE CONSTRAINT DBS_NN_LEHRVERANSTALTUNG_FB_NR;
+
+Table DBS_TAB_LEHRVERANSTALTUNG altered.
+
+SQL> ALTER TABLE DBS_TAB_LEHRVERANSTALTUNG DISABLE CONSTRAINT DBS_NN_LEHRVERANST_LV_NAME;
+
+Table DBS_TAB_LEHRVERANSTALTUNG altered.
+
+SQL> ALTER TABLE DBS_TAB_MITARBEITER DISABLE CONSTRAINT DBS_NN_MITARBEITER_BERUF;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE DBS_TAB_MITARBEITER DISABLE CONSTRAINT DBS_NN_MITARBEITER_GEHALT;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE DBS_TAB_MITARBEITER DISABLE CONSTRAINT DBS_NN_MITARBEITER_INSTITUTION;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE DBS_TAB_PROFESSOR DISABLE CONSTRAINT DBS_NN_PROFESSOR_FACHGEBIET;
+
+Table DBS_TAB_PROFESSOR altered.
+
+SQL> ALTER TABLE DBS_TAB_PROFESSOR DISABLE CONSTRAINT DBS_NN_PROFESSOR_TITEL;
+
+Table DBS_TAB_PROFESSOR altered.
+
+SQL> ALTER TABLE DBS_TAB_STUDENT DISABLE CONSTRAINT DBS_NN_STUDENT_FB_NR;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE DBS_TAB_STUDENT DISABLE CONSTRAINT DBS_NN_STUDENT_HO_NR;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE DBS_TAB_VORNAME DISABLE CONSTRAINT DBS_NN_VORNAME_VORNAME;
+
+Table DBS_TAB_VORNAME altered.
+
+SQL> 
+SQL> 
+SQL> -- Disable Primary Key Constraint Section
+SQL> -- ______________________________________
+SQL> 
+SQL> ALTER TABLE DBS_TAB_ANSCHRIFT DISABLE CONSTRAINT DBS_PK_ANSCHRIFT;
+
+Table DBS_TAB_ANSCHRIFT altered.
+
+SQL> ALTER TABLE DBS_TAB_FACHBEREICH DISABLE CONSTRAINT DBS_PK_FACHBEREICH;
+
+Table DBS_TAB_FACHBEREICH altered.
+
+SQL> ALTER TABLE DBS_TAB_GEBAEUDE DISABLE CONSTRAINT DBS_PK_GEBAEUDE;
+
+Table DBS_TAB_GEBAEUDE altered.
+
+SQL> ALTER TABLE DBS_TAB_HOCHSCHULANGEHOERIGER DISABLE CONSTRAINT DBS_PK_HOCHSCHULANGEHOERIGER;
+
+Table DBS_TAB_HOCHSCHULANGEHOERIGER altered.
+
+SQL> ALTER TABLE DBS_TAB_LEHRVERANSTALTUNG DISABLE CONSTRAINT DBS_PK_LEHRVERANSTALTUNG;
+
+Table DBS_TAB_LEHRVERANSTALTUNG altered.
+
+SQL> ALTER TABLE DBS_TAB_LV_ORT DISABLE CONSTRAINT DBS_PK_LV_ORT_ID;
+
+Table DBS_TAB_LV_ORT altered.
+
+SQL> ALTER TABLE DBS_TAB_MITARBEITER DISABLE CONSTRAINT DBS_PK_MITARBEITER;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE DBS_TAB_PROFESSOR DISABLE CONSTRAINT DBS_PK_PROFESSOR;
+
+Table DBS_TAB_PROFESSOR altered.
+
+SQL> ALTER TABLE DBS_TAB_PROF_HAELT_LV DISABLE CONSTRAINT DBS_PK_PROF_HAELT_LV;
+
+Table DBS_TAB_PROF_HAELT_LV altered.
+
+SQL> ALTER TABLE DBS_TAB_STUDENT DISABLE CONSTRAINT DBS_PK_STUDENT;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE DBS_TAB_VORNAME DISABLE CONSTRAINT DBS_PK_VORNAME;
+
+Table DBS_TAB_VORNAME altered.
+
+SQL> 
+SQL> ALTER TABLE DBS_TAB_PRUEFUNG DISABLE CONSTRAINT DBS_PK_PRUEFUNG;
+
+Table DBS_TAB_PRUEFUNG altered.
+
+SQL> 
+SQL> 
+SQL> -- Disable Unique Key Constraint Section
+SQL> -- ______________________________________
+SQL> ALTER TABLE DBS_TAB_STUDENT DISABLE CONSTRAINT DBS_UK_STUDENT_PERS;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE DBS_TAB_STUDENT DISABLE CONSTRAINT DBS_UK_STUDENT_HO;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE DBS_TAB_MITARBEITER DISABLE CONSTRAINT DBS_UK_MITARBEITER_HO;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> 
+SQL> -- Insert anschrift Section
+SQL> -- ________________________
+SQL> 
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1001 , 1 , 53111 , 'Bonn' , 'Hinter der Stadt' , '22' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1001 , 2 , 53721 , 'Siegburg' , 'Notstrasse' , '23 A' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1002 , 1 , 53111 , 'Bonn' , 'Im Pfaffenbach' , '55' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1003 , 1 , 53111 , 'Bonn' , 'Weidbrunner Gasse' , '14' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1004 , 1 , 53773 , 'Hennef', 'Im Ehrental' , '10'  );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1004 , 2 , 53111 , 'Bonn' , 'Siegburger Strasse' , '43' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1005 , 1 , 53111 , 'Bonn' , 'Siegburger Strasse', '5' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1006 , 1 , 53111 , 'Bonn' , 'Stiller Tor' , '31' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1007 , 1 , 53111 , 'Bonn' , 'Rötweg' , '88' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1008 , 1 , 53859 , 'Niederkassel' , 'Gothaer Straße' , '23' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1008 , 2 , 53111 , 'Bonn' , 'Am neuen Teich' , '64 C' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1009 , 1 , 53111 , 'Bonn' , 'Am neuen Teich' , '10' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1010 , 1 , 53111 , 'Bonn' , 'Reichenbach' , '54' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1011 , 1 , 53111 , 'Bonn' , 'Weidbrunner Tor' , '119' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1012 , 1 , 53111 , 'Bonn' , 'Brackstrasse' , '24' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1013 , 1 , 53111 , 'Bonn' , 'Brunnenweg' , '86' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1013 , 2 , 98574 , 'Schmalkalden' , 'Blechhammer' , NULL );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1014 , 1 , 53111 , 'Bonn' , 'Allendestrasse' , '14' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1015 , 1 , 53111 , 'Bonn' , 'Grasberg' , '65' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1016 , 1 , 53111 , 'Bonn' , 'Auerweg' , '14' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1017 , 1 , 53111 , 'Bonn' , 'Eichelbach' , '76' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1018 , 1 , 53111 , 'Bonn' , 'Am Rheinufer' , '24' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1019 , 1 , 53111 , 'Bonn' , 'Siegburger Strasse' , '17' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1019 , 2 , 53754 , 'Sankt Augustin' , 'Burgweg' , '32' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1020 , 1 , 53111 , 'Bonn' , 'Bahnhofstrasse' , '66' );
+
+1 row inserted.
+
+SQL> 
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1021 , 1 , 53111 , 'Bonn' , 'Markt' , '' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1022 , 1 , 53757 , 'Sankt Augustin' , 'Kölnstraße' , '22' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1023 , 1 , 53343 , 'Wachtberg' , 'Bondorfer Straße' , '1' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1024 , 1 , 53347 , 'Alfter' , 'Amselweg' , '7' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1025 , 1 , 53347 , 'Alfter' , 'Drosselweg' , '12' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1026 , 1 , 53639 , 'Königswinter' , 'Königswinterer Straße' , '55' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1027 , 1 , 53809 , 'Ruppichteroth' , 'Bahnhofstrasse' , '3' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1028 , 1 , 53757 , 'Sankt Augustin' , 'Dornierstraße' , '' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1029 , 1 , 53804 , 'Much' , 'Hauptstraße' , '17' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_anschrift VALUES ( 1030, 1 , 53111 , 'Bonn' , 'Bertha-von-Suttner-Platz' , '' );
+
+1 row inserted.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- Insert fachbereich Section
+SQL> -- __________________________
+SQL> 
+SQL> INSERT INTO dbs_tab_fachbereich VALUES (3 , 'Elektrotechnik' , '508311' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_fachbereich VALUES (1 , 'Wirtschaftswissenschaften' , '508514' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_fachbereich VALUES (2 , 'Informatik' , '508321' );
+
+1 row inserted.
+
+SQL> 
+SQL> 
+SQL> -- Insert Gebaeude  Section
+SQL> -- ________________________
+SQL> 
+SQL> INSERT INTO dbs_tab_gebaeude VALUES ( 'A' , 'Grantham-Allee' , '20' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_gebaeude VALUES ( 'B' , 'Grantham-Allee' , '20' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_gebaeude VALUES ( 'C' , 'Grantham-Allee' , '20' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_gebaeude VALUES ( 'D' , 'Zum Steimelsberg' , '7' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_gebaeude VALUES ( 'E' , 'von-Liebig-Straße' , '20' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_gebaeude VALUES ( 'F' , 'von-Liebig-Straße' , '20');
+
+1 row inserted.
+
+SQL> 
+SQL> 
+SQL> -- Insert Hochschulangehoeriger Section
+SQL> -- ___________________________________
+SQL> 
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1001 , 'Dilloo' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1002 , 'Wilke' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1003 , 'Schmidt' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1004 , 'Grau' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1005 , 'Schmidt' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1006 , 'Toastbrot' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1007 , 'Meyer' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1008 , 'Meier' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1009 , 'Mayer' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1010 , 'Mueller' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1011 , 'Lehman' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1012 , 'Kohl' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1013 , 'Listig' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1014 , 'Becker' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1015 , 'Kleekamp' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1016 , 'Schmidt' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1017 , 'Hinz' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1018 , 'Kunz' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1019 , 'Wachtendonk' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1020 , 'Neumann' );
+
+1 row inserted.
+
+SQL> 
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1021 , 'Amsel' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1022 , 'Barsch' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1023 , 'Camel' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1024 , 'Dachs' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1025 , 'Eber' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1026 , 'Fuchs' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1027 , 'Ganz' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1028 , 'Hahn' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1029 , 'Iltis' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_hochschulangehoeriger VALUES ( 1030 , 'Jaguar' );
+
+1 row inserted.
+
+SQL> 
+SQL> 
+SQL> -- Insert Lehrveranstaltung Section
+SQL> -- ________________________________
+SQL> 
+SQL> INSERT INTO dbs_tab_lv_ort VALUES ( 1144 , 'Mo' , '1600' , 'F' ,'4' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lv_ort VALUES ( 1144 , 'Mo' , '1745' , 'C' ,'181' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lv_ort VALUES ( 1150 , 'Do' , '1230' , 'C' ,'177' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lv_ort VALUES ( 1150 , 'Fr' , '1230' , 'C' ,'181' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lv_ort VALUES ( 1152 , 'Fr' , '1600' , 'C' ,'181' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lv_ort VALUES ( 1152 , 'Do' , '1230' , 'C' ,'016' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lv_ort VALUES ( 1152 , 'Fr' , '1230' , NULL , NULL );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lv_ort VALUES ( 1153 , 'Di' , '1415' , 'C' ,'177' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lv_ort VALUES ( 1153 , 'Do' , '1015' , 'C' ,'181' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lv_ort VALUES ( 1153 , 'Do' , '1230' , 'C' ,'177' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lv_ort VALUES ( 1153 , 'Do' , '1415' , 'C' ,'181' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lv_ort VALUES ( 1154 , 'Di' , '0815' , 'E' ,'4' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lv_ort VALUES ( 1154 , 'Di' , '1600' , 'F' ,'23' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lv_ort VALUES ( 1154 , 'Di' , '1745' , 'C' ,'181' );
+
+1 row inserted.
+
+SQL> 
+SQL> 
+SQL> -- Insert Mitarbeiter Section
+SQL> -- _____________
+SQL> 
+SQL> INSERT INTO dbs_tab_mitarbeiter VALUES ('507252' , 1001 , 2 , 'Forschung und Lehre' , 'studentische Hilfskraft' , 400 , '508514' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_mitarbeiter VALUES ('507262' , 1004 , 2 , 'Forschung und Lehre' , 'studentische Hilfskraft' , 400 , '508514' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_mitarbeiter VALUES ('507253' , 1006 , 2 , 'Forschung und Lehre' , 'studentische Hilfskraft' , 400 , '508321' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_mitarbeiter VALUES ('507254' , 1008 , 2 , 'Forschung und Lehre' , 'studentische Hilfskraft' , 200 , '508322' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_mitarbeiter VALUES ('507263' , 1010 , 2 , 'Forschung und Lehre' , 'studentische Hilfskraft' , 400 , '508322' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_mitarbeiter VALUES ('508311' , 1011 , 3 , 'Forschung und Lehre' , 'Professor' , 5150 , NULL );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_mitarbeiter VALUES ('508514' , 1012 , 2 , 'Forschung und Lehre' , 'Professor' , 5200 , NULL );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_mitarbeiter VALUES ('508321' , 1013 , 2 , 'Forschung und Lehre' , 'Professor' , 5300 , NULL );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_mitarbeiter VALUES ('508523' , 1014 , 2 , 'Forschung und Lehre' , 'Professor' , 5050 , NULL );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_mitarbeiter VALUES ('508322' , 1015 , 2 , 'Forschung und Lehre' , 'Professor' , 5650 , NULL );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_mitarbeiter VALUES ('509514' , 1016 , 1 , 'Forschung und Lehre' , 'Professor' , 5650 , NULL );
+
+1 row inserted.
+
+SQL> 
+SQL> INSERT INTO dbs_tab_mitarbeiter VALUES ('601313' , 1021 , 2 , 'Forschung und Lehre' , 'studentische Hilfskraft' , 400 , '508322' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_mitarbeiter VALUES ('602222' , 1025 , 3 , 'Forschung und Lehre' , 'studentische Hilfskraft' , 400 , '508322' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_mitarbeiter VALUES ('601414' , 1030 , 2 , 'Forschung und Lehre' , 'studentische Hilfskraft' , 400 , '508322' );
+
+1 row inserted.
+
+SQL> 
+SQL> -- Insert Name_LV Section
+SQL> -- ______________________
+SQL> 
+SQL> INSERT INTO dbs_tab_lehrveranstaltung VALUES ( 1142 , 'Marketing' , 1);
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lehrveranstaltung VALUES ( 1143 , 'Volkswirtschaftslehre I' , 1);
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lehrveranstaltung VALUES ( 1149 , 'Personalmanagement' , 1);
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lehrveranstaltung VALUES ( 1144 , 'Datenbanksysteme' , 2);
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lehrveranstaltung VALUES ( 1154 , 'Betriebssysteme' , 2);
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lehrveranstaltung VALUES ( 1145 , 'Informationssysteme im Handel' , 1);
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lehrveranstaltung VALUES ( 1146 , 'Programmierung I' , 2);
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lehrveranstaltung VALUES ( 1148 , 'Programmierung II' , 2);
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lehrveranstaltung VALUES ( 1150 , 'Statistik' , 2);
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lehrveranstaltung VALUES ( 1151 , 'Datenstrukturen, Algorithmen' , 2);
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lehrveranstaltung VALUES ( 1152 , 'Datenbanksystemtechnik' , 2);
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_lehrveranstaltung VALUES ( 1153 , 'Methoden der Programmierung' , 2);
+
+1 row inserted.
+
+SQL> 
+SQL> 
+SQL> -- Insert Professor Section
+SQL> -- ________________________
+SQL> 
+SQL> INSERT INTO dbs_tab_professor VALUES ( 'Prof. Dr.' , '508311' , 'Mathematik' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_professor VALUES ( 'Prof. Dr.' , '508514' , 'Marketing' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_professor VALUES ( 'Prof.' , '508321' , 'Betriebssysteme' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_professor VALUES ( 'Prof. Dr.' , '508523' , 'Datenbanksysteme' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_professor VALUES ( 'Prof.' , '508322' , 'Prammiersprachen' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_professor VALUES ( 'Prof. Dr.' , '509514' , 'Statistik' );
+
+1 row inserted.
+
+SQL> 
+SQL> 
+SQL> -- Insert Prof_haelt_LV Section
+SQL> -- _____________
+SQL> 
+SQL> INSERT INTO dbs_tab_prof_haelt_LV VALUES ( '508321' , 1144 , 'Mo' , '1600' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_prof_haelt_LV VALUES ( '508321' , 1144 , 'Mo' , '1745' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_prof_haelt_LV VALUES ( '508523' , 1144 , 'Mo' , '1600' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_prof_haelt_LV VALUES ( '508523' , 1144 , 'Mo' , '1745' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_prof_haelt_LV VALUES ( '508523' , 1152 , 'Do' , '1230' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_prof_haelt_LV VALUES ( '508523' , 1152 , 'Fr' , '1230' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_prof_haelt_LV VALUES ( '508523' , 1152 , 'Fr' , '1600' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_prof_haelt_LV VALUES ( '509514' , 1150 , 'Do' , '1230' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_prof_haelt_LV VALUES ( '509514' , 1150 , 'Fr' , '1230' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_prof_haelt_LV VALUES ( '508321' , 1153 , 'Di' , '1415' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_prof_haelt_LV VALUES ( '508321' , 1153 , 'Do' , '1015' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_prof_haelt_LV VALUES ( '508321' , 1153 , 'Do' , '1230' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_prof_haelt_LV VALUES ( '508321' , 1153 , 'Do' , '1415' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_prof_haelt_LV VALUES ( '508321' , 1154 , 'Di' , '0815' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_prof_haelt_LV VALUES ( '508321' , 1154 , 'Di' , '1600' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_prof_haelt_LV VALUES ( '508321' , 1154 , 'Di' , '1745' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_prof_haelt_LV VALUES ( '508523' , 1154 , 'Di' , '0815' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_prof_haelt_LV VALUES ( '508523' , 1154 , 'Di' , '1600' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_prof_haelt_LV VALUES ( '508523' , 1154 , 'Di' , '1745' );
+
+1 row inserted.
+
+SQL> 
+SQL> 
+SQL> -- Insert Student Section
+SQL> -- ______________________
+SQL> 
+SQL> INSERT INTO dbs_tab_student VALUES ( 1001 , '507252' , 801426 , 2 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_student VALUES ( 1002 , NULL , 806142 , 2 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_student VALUES ( 1003 , NULL , 807262 , 2 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_student VALUES ( 1004 , '507262' , 806152  , 2 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_student VALUES ( 1005 , NULL , 806153 , 2 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_student VALUES ( 1006 , '507253' , 806141 , 2 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_student VALUES ( 1007 , NULL , 806462 , 2 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_student VALUES ( 1008 , '507254' , 907652 , 2 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_student VALUES ( 1009 , NULL , 807232 , 3 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_student VALUES ( 1010 , '507263' , 807252 , 1 );
+
+1 row inserted.
+
+SQL> 
+SQL> INSERT INTO dbs_tab_student VALUES ( 1021 , '601313' , 808602 , 1 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_student VALUES ( 1022 , Null , 808603 , 1 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_student VALUES ( 1023 , NULL , 808604 , 2 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_student VALUES ( 1024 , NULL , 808605 , 3 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_student VALUES ( 1025 , '602222' , 808606 , 2 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_student VALUES ( 1026 , NULL , 808607, 1 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_student VALUES ( 1027 , NULL , 808608 , 2 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_student VALUES ( 1028 , NULL , 808609, 1 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_student VALUES ( 1029 , NULL , 808610, 3 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_student VALUES ( 1030 , '601414' , 808611, 1 );
+
+1 row inserted.
+
+SQL> 
+SQL> 
+SQL> -- Insert Vorname Section
+SQL> -- ______________________
+SQL> 
+SQL> INSERT INTO dbs_tab_vorname Values ( 1001 , 1 , 'Sabine' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1001 , 2 , 'Petra' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1001 , 3 , 'Martina' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1002 , 1 , 'Hans' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1002 , 2 , 'Hans' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1003 , 1 , 'Frank' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1004 , 1 , 'Otto' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1005 , 1 , 'Lisa' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1006 , 1 , 'Brigitte' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1007 , 1 , 'Manuel' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1008 , 1 , 'Fritz' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1009 , 1 , 'Helmut' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1010 , 1 , 'Walter' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1011 , 1 , 'Klaus' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1012 , 1 , 'Hans' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1012 , 2 , 'Peter' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1013 , 1 , 'Franz' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1014 , 1 , 'Gunter' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1015 , 1 , 'Eduard' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1016 , 1 , 'Emil' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1017 , 1 , 'Clotilde' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1018 , 1 , 'Regina' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1019 , 1 , 'Erna' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1020 , 1 , 'Ernst' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1020 , 2 , 'Klaus' );
+
+1 row inserted.
+
+SQL> 
+SQL> INSERT INTO dbs_tab_vorname Values ( 1021 , 1 , 'Ben' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1021 , 2 , 'Elias' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1022 , 1 , 'Leon' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1023 , 1 , 'Emilia' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1024 , 1 , 'Paul' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1024 , 2 , 'Felix' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1025 , 1 , 'Emma' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1026 , 1 , 'Mia' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1027 , 1 , 'Mila' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1028 , 1 , 'Noah' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1029 , 1 , 'David' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1030 , 1 , 'Julian' );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_vorname Values ( 1030 , 2 , 'Ella' );
+
+1 row inserted.
+
+SQL> 
+SQL> -- Insert Pruefung Section
+SQL> -- ______________________
+SQL> --INSERT INTO dbs_tab_pruefung Values ( Matr , LVNr , 'Prof_PersNr', Versuch, Datum, Note(number2,1) );
+SQL> INSERT INTO dbs_tab_pruefung Values ( 808602 , 1144 , '508321', 1, TO_DATE(('17.' || (select to_char(add_months(SYSDATE,-6),'MM.YYYY') FROM dual)),'DD.MM.YYYY'), 1.3 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_pruefung Values ( 808602 , 1152 , '508321', 1, TO_DATE(('07.' || (select to_char(add_months(SYSDATE,-6),'MM.YYYY') FROM dual)),'DD.MM.YYYY'), 5.0 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_pruefung Values ( 808602 , 1152 , '508321', 2, TO_DATE(('19.' || (select to_char(add_months(SYSDATE,-6),'MM.YYYY') FROM dual)),'DD.MM.YYYY'), 4.7 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_pruefung Values ( 808603 , 1153 , '508323', 1, TO_DATE(('13.' || (select to_char(add_months(SYSDATE,+3),'MM.YYYY') FROM dual)),'DD.MM.YYYY'), Null );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_pruefung Values ( 808604 , 1144 , '508321', 1, TO_DATE(('17.' || (select to_char(add_months(SYSDATE,-6),'MM.YYYY') FROM dual)),'DD.MM.YYYY'), 2.0 );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_pruefung Values ( 808603 , 1144 , '508321', 1, Null, Null );
+
+1 row inserted.
+
+SQL> INSERT INTO dbs_tab_pruefung Values ( 808603 , 1152 , '508321', 1, Null, Null );
+
+1 row inserted.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- Enable Unique Key Constraint Section
+SQL> -- _____________________________________
+SQL> ALTER TABLE DBS_TAB_STUDENT ENABLE CONSTRAINT DBS_UK_STUDENT_PERS;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE DBS_TAB_STUDENT ENABLE CONSTRAINT DBS_UK_STUDENT_HO;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE DBS_TAB_MITARBEITER ENABLE CONSTRAINT DBS_UK_MITARBEITER_HO;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> 
+SQL> 
+SQL> -- Enable Primary Key Constraint Section
+SQL> -- _____________________________________
+SQL> 
+SQL> ALTER TABLE DBS_TAB_VORNAME ENABLE CONSTRAINT DBS_PK_VORNAME;
+
+Table DBS_TAB_VORNAME altered.
+
+SQL> ALTER TABLE DBS_TAB_STUDENT ENABLE CONSTRAINT DBS_PK_STUDENT;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE DBS_TAB_PROF_HAELT_LV ENABLE CONSTRAINT DBS_PK_PROF_HAELT_LV;
+
+Table DBS_TAB_PROF_HAELT_LV altered.
+
+SQL> ALTER TABLE DBS_TAB_PROFESSOR ENABLE CONSTRAINT DBS_PK_PROFESSOR;
+
+Table DBS_TAB_PROFESSOR altered.
+
+SQL> ALTER TABLE DBS_TAB_MITARBEITER ENABLE CONSTRAINT DBS_PK_MITARBEITER;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE DBS_TAB_LV_ORT ENABLE CONSTRAINT DBS_PK_LV_ORT_ID;
+
+Table DBS_TAB_LV_ORT altered.
+
+SQL> ALTER TABLE DBS_TAB_LEHRVERANSTALTUNG ENABLE CONSTRAINT DBS_PK_LEHRVERANSTALTUNG;
+
+Table DBS_TAB_LEHRVERANSTALTUNG altered.
+
+SQL> ALTER TABLE DBS_TAB_HOCHSCHULANGEHOERIGER ENABLE CONSTRAINT DBS_PK_HOCHSCHULANGEHOERIGER;
+
+Table DBS_TAB_HOCHSCHULANGEHOERIGER altered.
+
+SQL> ALTER TABLE DBS_TAB_GEBAEUDE ENABLE CONSTRAINT DBS_PK_GEBAEUDE;
+
+Table DBS_TAB_GEBAEUDE altered.
+
+SQL> ALTER TABLE DBS_TAB_FACHBEREICH ENABLE CONSTRAINT DBS_PK_FACHBEREICH;
+
+Table DBS_TAB_FACHBEREICH altered.
+
+SQL> ALTER TABLE DBS_TAB_ANSCHRIFT ENABLE CONSTRAINT DBS_PK_ANSCHRIFT;
+
+Table DBS_TAB_ANSCHRIFT altered.
+
+SQL> 
+SQL> 
+SQL> -- Enable Not Null Constraint Section
+SQL> -- _____________________________________
+SQL> 
+SQL> ALTER TABLE DBS_TAB_VORNAME ENABLE CONSTRAINT DBS_NN_VORNAME_VORNAME;
+
+Table DBS_TAB_VORNAME altered.
+
+SQL> ALTER TABLE DBS_TAB_STUDENT ENABLE CONSTRAINT DBS_NN_STUDENT_HO_NR;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE DBS_TAB_STUDENT ENABLE CONSTRAINT DBS_NN_STUDENT_FB_NR;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE DBS_TAB_PROFESSOR ENABLE CONSTRAINT DBS_NN_PROFESSOR_TITEL;
+
+Table DBS_TAB_PROFESSOR altered.
+
+SQL> ALTER TABLE DBS_TAB_PROFESSOR ENABLE CONSTRAINT DBS_NN_PROFESSOR_FACHGEBIET;
+
+Table DBS_TAB_PROFESSOR altered.
+
+SQL> ALTER TABLE DBS_TAB_MITARBEITER ENABLE CONSTRAINT DBS_NN_MITARBEITER_INSTITUTION;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE DBS_TAB_MITARBEITER ENABLE CONSTRAINT DBS_NN_MITARBEITER_GEHALT;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE DBS_TAB_MITARBEITER ENABLE CONSTRAINT DBS_NN_MITARBEITER_BERUF;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE DBS_TAB_LEHRVERANSTALTUNG ENABLE CONSTRAINT DBS_NN_LEHRVERANST_LV_NAME;
+
+Table DBS_TAB_LEHRVERANSTALTUNG altered.
+
+SQL> ALTER TABLE DBS_TAB_LEHRVERANSTALTUNG ENABLE CONSTRAINT DBS_NN_LEHRVERANSTALTUNG_FB_NR;
+
+Table DBS_TAB_LEHRVERANSTALTUNG altered.
+
+SQL> ALTER TABLE DBS_TAB_HOCHSCHULANGEHOERIGER ENABLE CONSTRAINT DBS_NN_HOCHSCHULANG_HO_NAME;
+
+Table DBS_TAB_HOCHSCHULANGEHOERIGER altered.
+
+SQL> ALTER TABLE DBS_TAB_GEBAEUDE ENABLE CONSTRAINT DBS_NN_GEBAEUDE_STRASSE;
+
+Table DBS_TAB_GEBAEUDE altered.
+
+SQL> ALTER TABLE DBS_TAB_FACHBEREICH ENABLE CONSTRAINT DBS_NN_FACHBEREICH_DEKAN;
+
+Table DBS_TAB_FACHBEREICH altered.
+
+SQL> ALTER TABLE DBS_TAB_FACHBEREICH ENABLE CONSTRAINT DBS_NN_FB_NAME;
+
+Table DBS_TAB_FACHBEREICH altered.
+
+SQL> ALTER TABLE DBS_TAB_ANSCHRIFT ENABLE CONSTRAINT DBS_NN_ANSCHRIFT_STRASSE;
+
+Table DBS_TAB_ANSCHRIFT altered.
+
+SQL> ALTER TABLE DBS_TAB_ANSCHRIFT ENABLE CONSTRAINT DBS_NN_ANSCHRIFT_PLZ;
+
+Table DBS_TAB_ANSCHRIFT altered.
+
+SQL> ALTER TABLE DBS_TAB_ANSCHRIFT ENABLE CONSTRAINT DBS_NN_ANSCHRIFT_ORT;
+
+Table DBS_TAB_ANSCHRIFT altered.
+
+SQL> 
+SQL> 
+SQL> -- Enable Foreign Key Constraint Section
+SQL> -- _____________________________________
+SQL> 
+SQL> ALTER TABLE DBS_TAB_VORNAME ENABLE CONSTRAINT DBS_FK_VORNAME_HOCHSCHULANG;
+
+Table DBS_TAB_VORNAME altered.
+
+SQL> ALTER TABLE DBS_TAB_STUDENT ENABLE CONSTRAINT DBS_FK_STUDENT_MITARBEITER;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE DBS_TAB_STUDENT ENABLE CONSTRAINT DBS_FK_STUDENT_HOCHSCHULANG;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE DBS_TAB_STUDENT ENABLE CONSTRAINT DBS_FK_STUDENT_FACHBEREICH;
+
+Table DBS_TAB_STUDENT altered.
+
+SQL> ALTER TABLE DBS_TAB_PROF_HAELT_LV ENABLE CONSTRAINT DBS_FK_PROF_HAELT_LV_PROFESSOR;
+
+Table DBS_TAB_PROF_HAELT_LV altered.
+
+SQL> ALTER TABLE DBS_TAB_PROF_HAELT_LV ENABLE CONSTRAINT DBS_FK_PROF_HAELT_LV_LV_ORT;
+
+Table DBS_TAB_PROF_HAELT_LV altered.
+
+SQL> ALTER TABLE DBS_TAB_PROFESSOR ENABLE CONSTRAINT DBS_FK_PROFESSOR_MITARBEITER;
+
+Table DBS_TAB_PROFESSOR altered.
+
+SQL> ALTER TABLE DBS_TAB_MITARBEITER ENABLE CONSTRAINT DBS_FK_MITARBEITER_MITARBEITER;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE DBS_TAB_MITARBEITER ENABLE CONSTRAINT DBS_FK_MITARB_HOCHSCHULANG;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE DBS_TAB_MITARBEITER ENABLE CONSTRAINT DBS_FK_MIRARBEITER_FACHBEREICH;
+
+Table DBS_TAB_MITARBEITER altered.
+
+SQL> ALTER TABLE DBS_TAB_LV_ORT ENABLE CONSTRAINT DBS_FK_LV_ORT_LEHRVERANST;
+
+Table DBS_TAB_LV_ORT altered.
+
+SQL> ALTER TABLE DBS_TAB_LV_ORT ENABLE CONSTRAINT DBS_FK_LV_ORT_GEBAEUDE;
+
+Table DBS_TAB_LV_ORT altered.
+
+SQL> ALTER TABLE DBS_TAB_LEHRVERANSTALTUNG ENABLE CONSTRAINT DBS_FK_LEHRVERANST_FACHBEREICH;
+
+Table DBS_TAB_LEHRVERANSTALTUNG altered.
+
+SQL> ALTER TABLE DBS_TAB_FACHBEREICH ENABLE CONSTRAINT DBS_FK_FACHBEREICH_MITARBEITER;
+
+Table DBS_TAB_FACHBEREICH altered.
+
+SQL> ALTER TABLE DBS_TAB_ANSCHRIFT ENABLE CONSTRAINT DBS_FK_ANSCHRIFT_HOCHSCHULANG;
+
+Table DBS_TAB_ANSCHRIFT altered.
+
+SQL> 
+SQL> --
+SQL> -- ***************************************************************
+SQL> -- * SQL*plus Job Control Section
+SQL> 
+SQL> --spool off
+SQL> 
+SQL> 
+SQL> -- Test Data Section 
+SQL> -- _________________________________
+SQL> 
+SQL> start ./dbs_test_data.sql
+SQL> -- ***************************************************************
+SQL> -- * File Name:                  dbs_test_data.sql               *
+SQL> -- * File Creator:               Knolle                          *
+SQL> -- * Revision:                                                   *
+SQL> -- * LastDate:                   5.12.2022                       *
+SQL> -- *                                                             *
+SQL> -- * <ChangeLogDate>             <ChangeLogText>                 *
+SQL> -- ***************************************************************
+SQL> 
+SQL> -- ***************************************************************
+SQL> -- * SQL*plus Job Control Section
+SQL> 
+SQL> set echo on
+SQL> set linesize 256
+SQL> set pagesize 50
+SQL> --spool dbs_test_data.log
+SQL> 
+SQL> SELECT * FROM dbs_tab_ANSCHRIFT;
+
+     HO_NR      AN_NR        PLZ ORT                            STRASSE                        HAUS_
+---------- ---------- ---------- ------------------------------ ------------------------------ -----
+      1001          1      53111 Bonn                           Hinter der Stadt               22   
+      1001          2      53721 Siegburg                       Notstrasse                     23 A 
+      1002          1      53111 Bonn                           Im Pfaffenbach                 55   
+      1003          1      53111 Bonn                           Weidbrunner Gasse              14   
+      1004          1      53773 Hennef                         Im Ehrental                    10   
+      1004          2      53111 Bonn                           Siegburger Strasse             43   
+      1005          1      53111 Bonn                           Siegburger Strasse             5    
+      1006          1      53111 Bonn                           Stiller Tor                    31   
+      1007          1      53111 Bonn                           Rötweg                         88   
+      1008          1      53859 Niederkassel                   Gothaer Straße                 23   
+      1008          2      53111 Bonn                           Am neuen Teich                 64 C 
+      1009          1      53111 Bonn                           Am neuen Teich                 10   
+      1010          1      53111 Bonn                           Reichenbach                    54   
+      1011          1      53111 Bonn                           Weidbrunner Tor                119  
+      1012          1      53111 Bonn                           Brackstrasse                   24   
+      1013          1      53111 Bonn                           Brunnenweg                     86   
+      1013          2      98574 Schmalkalden                   Blechhammer                         
+      1014          1      53111 Bonn                           Allendestrasse                 14   
+      1015          1      53111 Bonn                           Grasberg                       65   
+      1016          1      53111 Bonn                           Auerweg                        14   
+      1017          1      53111 Bonn                           Eichelbach                     76   
+      1018          1      53111 Bonn                           Am Rheinufer                   24   
+      1019          1      53111 Bonn                           Siegburger Strasse             17   
+      1019          2      53754 Sankt Augustin                 Burgweg                        32   
+      1020          1      53111 Bonn                           Bahnhofstrasse                 66   
+      1021          1      53111 Bonn                           Markt                               
+      1022          1      53757 Sankt Augustin                 Kölnstraße                     22   
+      1023          1      53343 Wachtberg                      Bondorfer Straße               1    
+      1024          1      53347 Alfter                         Amselweg                       7    
+      1025          1      53347 Alfter                         Drosselweg                     12   
+      1026          1      53639 Königswinter                   Königswinterer Straße          55   
+      1027          1      53809 Ruppichteroth                  Bahnhofstrasse                 3    
+      1028          1      53757 Sankt Augustin                 Dornierstraße                       
+      1029          1      53804 Much                           Hauptstraße                    17   
+      1030          1      53111 Bonn                           Bertha-von-Suttner-Platz            
+
+35 rows selected. 
+
+SQL> SELECT * FROM dbs_tab_FACHBEREICH;
+
+F FB_NAME                        DEKAN     
+- ------------------------------ ----------
+3 Elektrotechnik                 508311    
+1 Wirtschaftswissenschaften      508514    
+2 Informatik                     508321    
+
+SQL> SELECT * FROM dbs_tab_GEBAEUDE;
+
+G STRASSE                        HAUS_
+- ------------------------------ -----
+A Grantham-Allee                 20   
+B Grantham-Allee                 20   
+C Grantham-Allee                 20   
+D Zum Steimelsberg               7    
+E von-Liebig-Straße              20   
+F von-Liebig-Straße              20   
+
+6 rows selected. 
+
+SQL> SELECT * FROM dbs_tab_HOCHSCHULANGEHOERIGER;
+
+     HO_NR HO_NAME                       
+---------- ------------------------------
+      1001 Dilloo                        
+      1002 Wilke                         
+      1003 Schmidt                       
+      1004 Grau                          
+      1005 Schmidt                       
+      1006 Toastbrot                     
+      1007 Meyer                         
+      1008 Meier                         
+      1009 Mayer                         
+      1010 Mueller                       
+      1011 Lehman                        
+      1012 Kohl                          
+      1013 Listig                        
+      1014 Becker                        
+      1015 Kleekamp                      
+      1016 Schmidt                       
+      1017 Hinz                          
+      1018 Kunz                          
+      1019 Wachtendonk                   
+      1020 Neumann                       
+      1021 Amsel                         
+      1022 Barsch                        
+      1023 Camel                         
+      1024 Dachs                         
+      1025 Eber                          
+      1026 Fuchs                         
+      1027 Ganz                          
+      1028 Hahn                          
+      1029 Iltis                         
+      1030 Jaguar                        
+
+30 rows selected. 
+
+SQL> SELECT * FROM dbs_tab_LV_ORT;
+
+     LV_NR TA ZEIT  G RAUM 
+---------- -- ----- - -----
+      1144 Mo 1600  F 4    
+      1144 Mo 1745  C 181  
+      1150 Do 1230  C 177  
+      1150 Fr 1230  C 181  
+      1152 Fr 1600  C 181  
+      1152 Do 1230  C 016  
+      1152 Fr 1230         
+      1153 Di 1415  C 177  
+      1153 Do 1015  C 181  
+      1153 Do 1230  C 177  
+      1153 Do 1415  C 181  
+      1154 Di 0815  E 4    
+      1154 Di 1600  F 23   
+      1154 Di 1745  C 181  
+
+14 rows selected. 
+
+SQL> SELECT * FROM dbs_tab_MITARBEITER;
+
+PERS_NR         HO_NR F INSTITUTION                    BERUF                              GEHALT CHEF_NR   
+---------- ---------- - ------------------------------ ------------------------------ ---------- ----------
+507252           1001 2 Forschung und Lehre            studentische Hilfskraft               400 508514    
+507262           1004 2 Forschung und Lehre            studentische Hilfskraft               400 508514    
+507253           1006 2 Forschung und Lehre            studentische Hilfskraft               400 508321    
+507254           1008 2 Forschung und Lehre            studentische Hilfskraft               200 508322    
+507263           1010 2 Forschung und Lehre            studentische Hilfskraft               400 508322    
+508311           1011 3 Forschung und Lehre            Professor                            5150           
+508514           1012 2 Forschung und Lehre            Professor                            5200           
+508321           1013 2 Forschung und Lehre            Professor                            5300           
+508523           1014 2 Forschung und Lehre            Professor                            5050           
+508322           1015 2 Forschung und Lehre            Professor                            5650           
+509514           1016 1 Forschung und Lehre            Professor                            5650           
+601313           1021 2 Forschung und Lehre            studentische Hilfskraft               400 508322    
+602222           1025 3 Forschung und Lehre            studentische Hilfskraft               400 508322    
+601414           1030 2 Forschung und Lehre            studentische Hilfskraft               400 508322    
+
+14 rows selected. 
+
+SQL> SELECT * FROM dbs_tab_LEHRVERANSTALTUNG;
+
+     LV_NR LV_NAME                        F
+---------- ------------------------------ -
+      1142 Marketing                      1
+      1143 Volkswirtschaftslehre I        1
+      1149 Personalmanagement             1
+      1144 Datenbanksysteme               2
+      1154 Betriebssysteme                2
+      1145 Informationssysteme im Handel  1
+      1146 Programmierung I               2
+      1148 Programmierung II              2
+      1150 Statistik                      2
+      1151 Datenstrukturen, Algorithmen   2
+      1152 Datenbanksystemtechnik         2
+      1153 Methoden der Programmierung    2
+
+12 rows selected. 
+
+SQL> SELECT * FROM dbs_tab_PROF_HAELT_LV;
+
+PERS_NR         LV_NR TA ZEIT 
+---------- ---------- -- -----
+508321           1144 Mo 1600 
+508321           1144 Mo 1745 
+508321           1153 Di 1415 
+508321           1153 Do 1015 
+508321           1153 Do 1230 
+508321           1153 Do 1415 
+508321           1154 Di 0815 
+508321           1154 Di 1600 
+508321           1154 Di 1745 
+508523           1144 Mo 1600 
+508523           1144 Mo 1745 
+508523           1152 Do 1230 
+508523           1152 Fr 1230 
+508523           1152 Fr 1600 
+508523           1154 Di 0815 
+508523           1154 Di 1600 
+508523           1154 Di 1745 
+509514           1150 Do 1230 
+509514           1150 Fr 1230 
+
+19 rows selected. 
+
+SQL> SELECT * FROM dbs_tab_PROFESSOR;
+
+TITEL           PERS_NR    FACHGEBIET                    
+--------------- ---------- ------------------------------
+Prof. Dr.       508311     Mathematik                    
+Prof. Dr.       508514     Marketing                     
+Prof.           508321     Betriebssysteme               
+Prof. Dr.       508523     Datenbanksysteme              
+Prof.           508322     Prammiersprachen              
+Prof. Dr.       509514     Statistik                     
+
+6 rows selected. 
+
+SQL> SELECT * FROM dbs_tab_STUDENT;
+
+     HO_NR PERS_NR       MATR_NR F
+---------- ---------- ---------- -
+      1001 507252         801426 2
+      1002                806142 2
+      1003                807262 2
+      1004 507262         806152 2
+      1005                806153 2
+      1006 507253         806141 2
+      1007                806462 2
+      1008 507254         907652 2
+      1009                807232 3
+      1010 507263         807252 1
+      1021 601313         808602 1
+      1022                808603 1
+      1023                808604 2
+      1024                808605 3
+      1025 602222         808606 2
+      1026                808607 1
+      1027                808608 2
+      1028                808609 1
+      1029                808610 3
+      1030 601414         808611 1
+
+20 rows selected. 
+
+SQL> SELECT * FROM dbs_tab_VORNAME;
+
+     HO_NR      VO_NR VORNAME             
+---------- ---------- --------------------
+      1001          1 Sabine              
+      1001          2 Petra               
+      1001          3 Martina             
+      1002          1 Hans                
+      1002          2 Hans                
+      1003          1 Frank               
+      1004          1 Otto                
+      1005          1 Lisa                
+      1006          1 Brigitte            
+      1007          1 Manuel              
+      1008          1 Fritz               
+      1009          1 Helmut              
+      1010          1 Walter              
+      1011          1 Klaus               
+      1012          1 Hans                
+      1012          2 Peter               
+      1013          1 Franz               
+      1014          1 Gunter              
+      1015          1 Eduard              
+      1016          1 Emil                
+      1017          1 Clotilde            
+      1018          1 Regina              
+      1019          1 Erna                
+      1020          1 Ernst               
+      1020          2 Klaus               
+      1021          1 Ben                 
+      1021          2 Elias               
+      1022          1 Leon                
+      1023          1 Emilia              
+      1024          1 Paul                
+      1024          2 Felix               
+      1025          1 Emma                
+      1026          1 Mia                 
+      1027          1 Mila                
+      1028          1 Noah                
+      1029          1 David               
+      1030          1 Julian              
+      1030          2 Ella                
+
+38 rows selected. 
+
+SQL> SELECT * FROM dbs_tab_PRUEFUNG;
+
+   MATR_NR      LV_NR PROFESSOR     VERSUCH DATUM          NOTE
+---------- ---------- ---------- ---------- -------- ----------
+    808602       1144 508321              1 17.07.23        1,3
+    808602       1152 508321              1 07.07.23          5
+    808602       1152 508321              2 19.07.23        4,7
+    808603       1153 508323              1 13.04.24           
+    808604       1144 508321              1 17.07.23          2
+    808603       1144 508321              1                    
+    808603       1152 508321              1                    
+
+7 rows selected. 
+
+SQL> 
+SQL> -- ***************************************************************
+SQL> -- * SQL*plus Job Control Section
+SQL> 
+SQL> --spool off
+SQL> 
+SQL> -- ***************************************************************
+SQL> -- * SQL*plus Job Control Section
+SQL> 
+SQL> spool off

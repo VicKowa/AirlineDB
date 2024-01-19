@@ -1,0 +1,1439 @@
+SQL> --
+SQL> -- Systemdatum
+SQL> --
+SQL>   SELECT user,
+  2           TO_CHAR(SYSDATE, 'dd-mm-yy hh24:mi:ss')
+  3    FROM   dual
+  4  ;
+
+USER                           TO_CHAR(SYSDATE,'
+------------------------------ -----------------
+VKOWAL2S                       07-01-24 18:25:02
+
+SQL> --
+SQL> -- ***************************************************************
+SQL> -- * S Q L - B E I S P I E L A N F R A G E N
+SQL> --
+SQL> -- 	3.1	Projektion
+SQL> --
+SQL> -- 	3.1.1	Auswählen von Eigenschaften (Spalten)
+SQL> --
+SQL> --	Wie lauten die Namen aller Lehrveranstaltungen? (Anzahl Datensätze: 12)
+SQL> --
+SQL> -- <311a>
+SQL> SELECT  lv_name
+  2  FROM    dbs_tab_lehrveranstaltung;
+
+LV_NAME                       
+------------------------------
+Marketing
+Volkswirtschaftslehre I
+Personalmanagement
+Datenbanksysteme
+Betriebssysteme
+Informationssysteme im Handel
+Programmierung I
+Programmierung II
+Statistik
+Datenstrukturen, Algorithmen
+Datenbanksystemtechnik
+Methoden der Programmierung
+
+12 rows selected. 
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </311a>
+SQL> --
+SQL> --	Welche Berufe haben die Mitarbeiter und wie hoch ist ihr
+SQL> --	Gehalt? (Anzahl Datensätze: 14)
+SQL> --
+SQL> -- <311b>
+SQL> SELECT  beruf, gehalt
+  2  FROM    dbs_tab_mitarbeiter;
+
+BERUF                              GEHALT
+------------------------------ ----------
+studentische Hilfskraft               400
+studentische Hilfskraft               400
+studentische Hilfskraft               400
+studentische Hilfskraft               200
+studentische Hilfskraft               400
+Professor                            5150
+Professor                            5200
+Professor                            5300
+Professor                            5050
+Professor                            5650
+Professor                            5650
+studentische Hilfskraft               400
+studentische Hilfskraft               400
+studentische Hilfskraft               400
+
+14 rows selected. 
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </311b>
+SQL> 
+SQL> --
+SQL> --	Wie lauten die Daten der Tabelle 'Professor'? (Anzahl Datensätze: 6)
+SQL> --
+SQL> -- <311c>
+SQL> SELECT  *
+  2  FROM    dbs_tab_mitarbeiter
+  3  WHERE   beruf = 'Professor';
+
+PERS_NR              HO_NR F INSTITUTION          BERUF                              GEHALT CHEF_NR   
+--------------- ---------- - -------------------- ------------------------------ ---------- ----------
+508311                1011 3 Forschung und Lehre  Professor                            5150           
+508514                1012 2 Forschung und Lehre  Professor                            5200           
+508321                1013 2 Forschung und Lehre  Professor                            5300           
+508523                1014 2 Forschung und Lehre  Professor                            5050           
+508322                1015 2 Forschung und Lehre  Professor                            5650           
+509514                1016 1 Forschung und Lehre  Professor                            5650           
+
+6 rows selected. 
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </311c>
+SQL> 
+SQL> 
+SQL> --
+SQL> -- 	3.1.2	Umbenennen von Spalten
+SQL> --
+SQL> --	Die Daten der Tabelle 'Gebaeude' sollen ausgegeben werden,
+SQL> -- 	wobei die Spalte 'haus_nr' in 'Hausnummer' umzubenennen ist. (Anzahl Datensätze: 6)
+SQL> --
+SQL> -- <312>
+SQL> SELECT  haus_nr AS Hausnummer, gebaeude, strasse
+  2  FROM    dbs_tab_gebaeude;
+
+HAUSN G STRASSE             
+----- - --------------------
+20    A Grantham-Allee      
+20    B Grantham-Allee      
+20    C Grantham-Allee      
+7     D Zum Steimelsberg    
+20    E von-Liebig-Straße   
+20    F von-Liebig-Straße   
+
+6 rows selected. 
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </312>
+SQL> 
+SQL> --
+SQL> -- 	3.1.3	Berechnen bzw. Ableiten von neuen Eigenschaften (Spalten)
+SQL> --
+SQL> --	Die Orte der Anschriften sollen mit der Landeskennung '(D)' ausgegeben werden
+SQL> --	(künstliche Spalte mit konstantem Wert). (Anzahl Datensätze: 35)
+SQL> --
+SQL> -- <313a>
+SQL> SELECT  ort,
+  2          '(D)' as Landeskennung
+  3  FROM dbs_tab_anschrift;
+
+ORT                  LAN
+-------------------- ---
+Bonn                 (D)
+Siegburg             (D)
+Bonn                 (D)
+Bonn                 (D)
+Hennef               (D)
+Bonn                 (D)
+Bonn                 (D)
+Bonn                 (D)
+Bonn                 (D)
+Niederkassel         (D)
+Bonn                 (D)
+Bonn                 (D)
+Bonn                 (D)
+Bonn                 (D)
+Bonn                 (D)
+Bonn                 (D)
+Schmalkalden         (D)
+Bonn                 (D)
+Bonn                 (D)
+Bonn                 (D)
+Bonn                 (D)
+Bonn                 (D)
+Bonn                 (D)
+Sankt Augustin       (D)
+Bonn                 (D)
+Bonn                 (D)
+Sankt Augustin       (D)
+Wachtberg            (D)
+Alfter               (D)
+Alfter               (D)
+Königswinter         (D)
+Ruppichteroth        (D)
+Sankt Augustin       (D)
+Much                 (D)
+Bonn                 (D)
+
+35 rows selected. 
+
+SQL> 
+SQL> 
+SQL> -- </313a>
+SQL> 
+SQL> --
+SQL> --	Zu jeder Personalnummer soll der Stundenlohn ausgegeben und als
+SQL> --	solcher benannt werden (Monat = 20 Tage zu je 8 Stunden). (Anzahl Datensätze: 14)
+SQL> --
+SQL> -- <313b>
+SQL> SELECT  pers_nr,
+  2          (gehalt / 20) / 8 AS Stundenlohn
+  3  FROM    dbs_tab_mitarbeiter;
+
+PERS_NR         STUNDENLOHN
+--------------- -----------
+507252                  2,5
+507262                  2,5
+507253                  2,5
+507254                 1,25
+507263                  2,5
+508311              32,1875
+508514                 32,5
+508321               33,125
+508523              31,5625
+508322              35,3125
+509514              35,3125
+601313                  2,5
+602222                  2,5
+601414                  2,5
+
+14 rows selected. 
+
+SQL> 
+SQL> 
+SQL> -- </313b>
+SQL> 
+SQL> --
+SQL> --	3.2	Selektion
+SQL> --
+SQL> --	3.2.1	Ausblenden identischer Zeilen
+SQL> --
+SQL> --	In welchen unterschiedlichen Orten leben die
+SQL> --	Hochschulangehörigen? (Anzahl Datensätze: 11)
+SQL> --
+SQL> -- <321a>
+SQL> SELECT DISTINCT ort
+  2  FROM    dbs_tab_anschrift;
+
+ORT                 
+--------------------
+Bonn
+Alfter
+Siegburg
+Hennef
+Sankt Augustin
+Schmalkalden
+Königswinter
+Wachtberg
+Ruppichteroth
+Niederkassel
+Much
+
+11 rows selected. 
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </321a>
+SQL> 
+SQL> --
+SQL> --	Zu welchen Zeiten wird in der Woche gelehrt? (Anzahl Datensätze: 11)
+SQL> --
+SQL> -- <321b>
+SQL> SELECT DISTINCT zeit, tag
+  2  FROM dbs_tab_prof_haelt_lv;
+
+ZEIT  TA
+----- --
+1600  Fr
+1600  Di
+1415  Di
+1745  Mo
+1230  Fr
+1230  Do
+1415  Do
+1745  Di
+0815  Di
+1600  Mo
+1015  Do
+
+11 rows selected. 
+
+SQL> 
+SQL> 
+SQL> -- </321b>
+SQL> 
+SQL> --
+SQL> --	3.2.2	Sortierung der Ausgabe
+SQL> --
+SQL> --	Die Personalnummern sind aufsteigend nach ihrem zugehörigen
+SQL> --  Gehalt auszugeben. (Anzahl Datensätze: 14)
+SQL> --
+SQL> -- <322a>
+SQL> SELECT  pers_nr
+  2  FROM    dbs_tab_mitarbeiter
+  3  ORDER BY gehalt ASC;
+
+PERS_NR        
+---------------
+507254    
+507262    
+507253    
+601313    
+507252    
+507263    
+602222    
+601414    
+508523    
+508311    
+508514    
+508321    
+508322    
+509514    
+
+14 rows selected. 
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </322a>
+SQL> 
+SQL> --
+SQL> --	Die Orte und Straßen sind absteigend sortiert nach Ort und bei
+SQL> --  gleichen Orten sind diese aufsteigend nach 'Strasse' auszugeben. (Anzahl Datensätze: 35)
+SQL> --
+SQL> -- <322b>
+SQL> SELECT  ort, strasse
+  2  FROM    dbs_tab_anschrift
+  3  ORDER BY ort DESC, strasse ASC;
+
+ORT                  STRASSE             
+-------------------- --------------------
+Wachtberg            Bondorfer Straße    
+Siegburg             Notstrasse          
+Schmalkalden         Blechhammer         
+Sankt Augustin       Burgweg             
+Sankt Augustin       Dornierstraße       
+Sankt Augustin       Kölnstraße          
+Ruppichteroth        Bahnhofstrasse      
+Niederkassel         Gothaer Straße      
+Much                 Hauptstraße         
+Königswinter         Königswinterer      
+                     Straße              
+
+Hennef               Im Ehrental         
+Bonn                 Allendestrasse      
+Bonn                 Am Rheinufer        
+Bonn                 Am neuen Teich      
+Bonn                 Am neuen Teich      
+Bonn                 Auerweg             
+Bonn                 Bahnhofstrasse      
+Bonn                 Bertha-von-Suttner-P
+                     latz                
+
+Bonn                 Brackstrasse        
+Bonn                 Brunnenweg          
+Bonn                 Eichelbach          
+Bonn                 Grasberg            
+Bonn                 Hinter der Stadt    
+Bonn                 Im Pfaffenbach      
+Bonn                 Markt               
+Bonn                 Reichenbach         
+Bonn                 Rötweg              
+Bonn                 Siegburger Strasse  
+Bonn                 Siegburger Strasse  
+Bonn                 Siegburger Strasse  
+Bonn                 Stiller Tor         
+Bonn                 Weidbrunner Gasse   
+Bonn                 Weidbrunner Tor     
+Alfter               Amselweg            
+Alfter               Drosselweg          
+
+35 rows selected. 
+
+SQL> 
+SQL> 
+SQL> -- </322b>
+SQL> 
+SQL> --
+SQL> --	3.2.3	Auswahl bestimmter Tupel (Zeilen, Informationsträger)
+SQL> --
+SQL> --	Welche Gebäude werden am Montag belegt? (Anzahl Datensätze: 2)
+SQL> --
+SQL> -- <323a>
+SQL> SELECT  gebaeude
+  2  FROM    dbs_tab_lv_ort
+  3  WHERE   tag = 'Mo';
+
+G
+-
+F
+C
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </323a>
+SQL> 
+SQL> --
+SQL> --	Wie lauten die Personalnummern derjenigen Mitarbeiter, die weniger
+SQL> --	als 20 € in der Stunde verdienen? (Anzahl Datensätze: 8)
+SQL> --
+SQL> -- <323b>
+SQL> 
+SQL> SELECT  pers_nr, gehalt
+  2  FROM    dbs_tab_mitarbeiter
+  3  WHERE   ((gehalt / 20) / 8) < 20;
+
+PERS_NR             GEHALT
+--------------- ----------
+507252                 400
+507262                 400
+507253                 400
+507254                 200
+507263                 400
+601313                 400
+602222                 400
+601414                 400
+
+8 rows selected. 
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </323b>
+SQL> 
+SQL> --
+SQL> --	3.2.4	Auswahl von Tupeln, die mehreren Bedingungen genügen
+SQL> --
+SQL> --	Es sollen die Nummern der Lehrveranstaltungen ausgegeben werden,
+SQL> --  die im Gebäude 'C' oder freitags abgehalten werden. (Anzahl Datensätze: 11)
+SQL> --
+SQL> -- <324a>
+SQL> 
+SQL> SELECT  lv_nr
+  2  FROM    dbs_tab_lv_ort
+  3  WHERE   gebaeude = 'C' OR tag = 'Fr';
+
+     LV_NR
+----------
+      1144
+      1150
+      1150
+      1152
+      1152
+      1152
+      1153
+      1153
+      1153
+      1153
+      1154
+
+11 rows selected. 
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </324a>
+SQL> 
+SQL> --
+SQL> --	Welche Mitarbeiter des Fachbereichs 2 verdienen mehr als
+SQL> --	5.000 €? (Anzahl Datensätze: 4)
+SQL> --
+SQL> -- <324b>
+SQL> 
+SQL> SELECT  pers_nr
+  2  FROM    dbs_tab_mitarbeiter
+  3  WHERE   gehalt > 5000 AND fb_Nr = 2;
+
+PERS_NR        
+---------------
+508514    
+508321    
+508523    
+508322    
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </324b>
+SQL> 
+SQL> --
+SQL> --	3.2.5	Vergleich mit einem Muster
+SQL> --
+SQL> --	Welche Hochschulangehörige mit einem Namen, der wie 'Meier'
+SQL> --	ausgesprochen wird, werden im System verwaltet? (Anzahl Datensätze: 3)
+SQL> --
+SQL> -- <325a>
+SQL> SELECT  ho_name
+  2  FROM    dbs_tab_hochschulangehoeriger
+  3  WHERE   ho_name LIKE 'M__er';
+
+HO_NAME             
+--------------------
+Meyer
+Meier
+Mayer
+
+SQL> 
+SQL> 
+SQL> -- </325a>
+SQL> 
+SQL> --
+SQL> --	Welche unterschiedlichen Vornamen die mit 'M' beginnen
+SQL> --	existieren im System? (Anzahl Datensätze: 4)
+SQL> --
+SQL> -- <325b>
+SQL> SELECT  vorname
+  2  FROM    dbs_tab_vorname
+  3  WHERE   vorname LIKE 'M%';
+
+VORNAME             
+--------------------
+Martina
+Manuel
+Mia
+Mila
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </325b>
+SQL> 
+SQL> --
+SQL> --	Welche Fachgebiete von Professoren enthalten das Wort
+SQL> --	'system'? (Anzahl Datensätze: 2)
+SQL> --
+SQL> -- <325c>
+SQL> SELECT  fachgebiet
+  2  FROM    dbs_tab_professor
+  3  WHERE   fachgebiet LIKE '%system%';
+
+FACHGEBIET          
+--------------------
+Betriebssysteme
+Datenbanksysteme
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </325c>
+SQL> 
+SQL> --
+SQL> --	3.2.6	Vergleich mit NULL-Werten
+SQL> --
+SQL> --	Gebe die Matrikelnummern solcher Studenten aus, die einen Job
+SQL> --	haben. (Anzahl Datensätze: 8)
+SQL> --
+SQL> -- <326a>
+SQL> SELECT  matr_nr
+  2  FROM    dbs_tab_student
+  3  WHERE   pers_nr IS NOT NULL;
+
+   MATR_NR
+----------
+    801426
+    806141
+    907652
+    806152
+    807252
+    808602
+    808611
+    808606
+
+8 rows selected. 
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </326a>
+SQL> 
+SQL> --
+SQL> --	Gebe die Daten der Studenten aus, deren Personalnummer nicht dem Wert
+SQL> --	507263 entsprechen. (Anzahl Datensätze: 19)
+SQL> --
+SQL> -- <326b>
+SQL> SELECT  *
+  2  FROM    dbs_tab_student
+  3  WHERE   pers_nr != '507263' OR pers_nr IS NULL;
+
+     HO_NR PERS_NR            MATR_NR F
+---------- --------------- ---------- -
+      1001 507252              801426 2
+      1002                     806142 2
+      1003                     807262 2
+      1004 507262              806152 2
+      1005                     806153 2
+      1006 507253              806141 2
+      1007                     806462 2
+      1008 507254              907652 2
+      1009                     807232 3
+      1021 601313              808602 1
+      1022                     808603 1
+      1023                     808604 2
+      1024                     808605 3
+      1025 602222              808606 2
+      1026                     808607 1
+      1027                     808608 2
+      1028                     808609 1
+      1029                     808610 3
+      1030 601414              808611 1
+
+19 rows selected. 
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </326b>
+SQL> 
+SQL> --
+SQL> --	3.3	Verbund von Tabellen
+SQL> --
+SQL> --	3.3.1	Equi-Join
+SQL> --
+SQL> --	Gebe eine Liste aller Fachbereichsnamen mit den Namen ihrer
+SQL> --	zugehörigen Lehrveranstaltungen aus. (Anzahl Datensätze: 12)
+SQL> --
+SQL> -- <331a>
+SQL> SELECT  f.fb_name, 
+  2          l.lv_name
+  3  FROM    dbs_tab_fachbereich f,
+  4          dbs_tab_lehrveranstaltung l
+  5  WHERE   f.fb_nr = l.fb_nr;
+
+FB_NAME                             LV_NAME                       
+----------------------------------- ------------------------------
+Wirtschaftswissenschaften           Marketing                     
+Wirtschaftswissenschaften           Volkswirtschaftslehre I       
+Wirtschaftswissenschaften           Personalmanagement            
+Wirtschaftswissenschaften           Informationssysteme im Handel 
+Informatik                          Datenbanksysteme              
+Informatik                          Betriebssysteme               
+Informatik                          Programmierung I              
+Informatik                          Programmierung II             
+Informatik                          Statistik                     
+Informatik                          Datenstrukturen, Algorithmen  
+Informatik                          Datenbanksystemtechnik        
+Informatik                          Methoden der Programmierung   
+
+12 rows selected. 
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </331a>
+SQL> 
+SQL> --
+SQL> --	neue Syntax:
+SQL> --
+SQL> -- <331a_neu>
+SQL> SELECT      f.fb_name, 
+  2              l.lv_name
+  3  FROM        dbs_tab_fachbereich f
+  4  INNER JOIN  dbs_tab_lehrveranstaltung l
+  5  ON          f.fb_nr = l.fb_nr;
+
+FB_NAME                             LV_NAME                       
+----------------------------------- ------------------------------
+Wirtschaftswissenschaften           Marketing                     
+Wirtschaftswissenschaften           Volkswirtschaftslehre I       
+Wirtschaftswissenschaften           Personalmanagement            
+Wirtschaftswissenschaften           Informationssysteme im Handel 
+Informatik                          Datenbanksysteme              
+Informatik                          Betriebssysteme               
+Informatik                          Programmierung I              
+Informatik                          Programmierung II             
+Informatik                          Statistik                     
+Informatik                          Datenstrukturen, Algorithmen  
+Informatik                          Datenbanksystemtechnik        
+Informatik                          Methoden der Programmierung   
+
+12 rows selected. 
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </331a_neu>
+SQL> 
+SQL> --
+SQL> --	In welchen unterschiedlichen Straßen finden am Freitag
+SQL> --	Lehrveranstaltungen statt? (Anzahl Datensätze: 1)
+SQL> --
+SQL> -- <331b>
+SQL> 
+SQL> SELECT  DISTINCT    g.strasse
+  2  FROM    dbs_tab_gebaeude g,
+  3          dbs_tab_lv_ort lo
+  4  WHERE   g.gebaeude = lo.gebaeude
+  5  AND     lo.tag = 'Fr';
+
+STRASSE             
+--------------------
+Grantham-Allee
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </331b>
+SQL> 
+SQL> --
+SQL> --	neue Syntax:
+SQL> --
+SQL> -- <331b_neu>
+SQL> 
+SQL> SELECT  DISTINCT    g.strasse
+  2  FROM        dbs_tab_gebaeude g
+  3  INNER JOIN  dbs_tab_lv_ort lo
+  4  ON          g.gebaeude = lo.gebaeude
+  5  AND         lo.tag = 'Fr';
+
+STRASSE             
+--------------------
+Grantham-Allee
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </331b_neu>
+SQL> 
+SQL> --
+SQL> --	Welche Studenten arbeiten nicht am Fachbereich, an dem
+SQL> --	sie eingeschrieben sind? (Anzahl Datensätze: 4)
+SQL> --
+SQL> -- <331c>
+SQL> 
+SQL> SELECT  s.matr_nr
+  2  FROM    dbs_tab_student s,
+  3          dbs_tab_mitarbeiter m
+  4  WHERE   s.pers_nr = m.pers_nr
+  5  AND     m.fb_nr != s.fb_nr;
+
+   MATR_NR
+----------
+    807252
+    808602
+    808611
+    808606
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </331c>
+SQL> 
+SQL> --
+SQL> --	neue Syntax:
+SQL> --
+SQL> -- <331c_neu>
+SQL> 
+SQL> SELECT      s.matr_nr
+  2  FROM        dbs_tab_student s
+  3  INNER JOIN  dbs_tab_mitarbeiter m
+  4  ON          s.pers_nr = m.pers_nr
+  5  AND         m.fb_nr != s.fb_nr;
+
+   MATR_NR
+----------
+    807252
+    808602
+    808611
+    808606
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </331c_neu>
+SQL> 
+SQL> --
+SQL> --	Wie lautet die Adresse des Professors des Fachgebiets
+SQL> --	'Mathematik'? (Anzahl Datensätze: 1)
+SQL> --
+SQL> -- <331d>
+SQL> SELECT  a.plz, a.ort, a.strasse
+  2  FROM    dbs_tab_anschrift a,
+  3          dbs_tab_mitarbeiter m,
+  4          dbs_tab_professor p
+  5  WHERE   a.ho_nr = a.ho_nr
+  6  AND     m.ho_nr = a.ho_nr
+  7  AND     m.pers_nr = p.pers_nr
+  8  AND     p.fachgebiet = 'Mathematik';
+
+       PLZ ORT                  STRASSE             
+---------- -------------------- --------------------
+     53111 Bonn                 Weidbrunner Tor     
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </331d>
+SQL> 
+SQL> --
+SQL> --	neue Syntax:
+SQL> --
+SQL> -- <331d_neu>
+SQL> 
+SQL> SELECT  a.plz, a.ort, a.strasse
+  2  FROM    ( dbs_tab_anschrift a
+  3           INNER JOIN dbs_tab_mitarbeiter m
+  4           ON m.ho_nr = a.ho_nr
+  5          )
+  6          INNER JOIN dbs_tab_professor p
+  7          ON m.pers_nr = p.pers_nr
+  8  WHERE   p.fachgebiet = 'Mathematik';
+
+       PLZ ORT                  STRASSE             
+---------- -------------------- --------------------
+     53111 Bonn                 Weidbrunner Tor     
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </331d_neu>
+SQL> 
+SQL> --
+SQL> --	3.3.2	Equi-Join mit NULL-Werten (Outer Equi-Join)
+SQL> --
+SQL> --	In welchen Institutionen arbeiten Studenten? Zeige auch solche
+SQL> --	Studenten an, die nicht arbeiten. (Anzahl Datensätze: 20)
+SQL> --
+SQL> --	spezielle Oracle Syntax (+):
+SQL> --
+SQL> -- <332>
+SQL> 
+SQL> SELECT  m.institution, s.matr_nr
+  2  FROM    dbs_tab_mitarbeiter m,
+  3          dbs_tab_student s
+  4  WHERE   m.pers_nr (+) = s.pers_nr;
+
+INSTITUTION             MATR_NR
+-------------------- ----------
+Forschung und Lehre      801426
+Forschung und Lehre      806152
+Forschung und Lehre      806141
+Forschung und Lehre      907652
+Forschung und Lehre      807252
+Forschung und Lehre      808602
+Forschung und Lehre      808606
+Forschung und Lehre      808611
+                         808610
+                         808609
+                         808608
+                         808607
+                         808605
+                         808604
+                         808603
+                         807232
+                         806462
+                         806153
+                         807262
+                         806142
+
+20 rows selected. 
+
+SQL> 
+SQL> 
+SQL> -- </332>
+SQL> 
+SQL> --
+SQL> --	neue Syntax:
+SQL> --
+SQL> -- <332_neu>
+SQL> 
+SQL> SELECT      m.institution, s.matr_nr
+  2  FROM        dbs_tab_mitarbeiter m
+  3  INNER JOIN  dbs_tab_student s
+  4  ON          m.pers_nr (+) = s.pers_nr;
+
+INSTITUTION             MATR_NR
+-------------------- ----------
+Forschung und Lehre      801426
+Forschung und Lehre      806152
+Forschung und Lehre      806141
+Forschung und Lehre      907652
+Forschung und Lehre      807252
+Forschung und Lehre      808602
+Forschung und Lehre      808606
+Forschung und Lehre      808611
+                         808610
+                         808609
+                         808608
+                         808607
+                         808605
+                         808604
+                         808603
+                         807232
+                         806462
+                         806153
+                         807262
+                         806142
+
+20 rows selected. 
+
+SQL> 
+SQL> 
+SQL> -- </332_neu>
+SQL> 
+SQL> --
+SQL> --	3.3.3	Theta-Join
+SQL> --
+SQL> --  Gebe eine Namensliste mit Spielpaarungen aus, in der die
+SQL> --  Personalnummer des ersten Spielers größer ist als die des
+SQL> --  zweiten Spielers, wobei alle Personalnummern größer
+SQL> --  als 508000 sein sollen. (Anzahl Datensätze: 36)
+SQL> --
+SQL> -- <333>
+SQL> 
+SQL> SELECT  ha1.ho_name AS Spieler1, ha2.ho_name AS Spieler2
+  2  FROM    dbs_tab_hochschulangehoeriger ha1,
+  3          dbs_tab_hochschulangehoeriger ha2,
+  4          dbs_tab_mitarbeiter m1,
+  5          dbs_tab_mitarbeiter m2
+  6  WHERE   ha1.ho_nr = m1.ho_nr
+  7  AND     ha2.ho_nr = m2.ho_nr
+  8  AND     m1.pers_nr > 508000
+  9  AND     m1.pers_nr > 508000
+ 10  AND     m1.pers_nr < m2.pers_nr;
+
+SPIELER1                       SPIELER2                      
+------------------------------ ------------------------------
+Kleekamp                       Kohl                          
+Listig                         Kohl                          
+Lehman                         Kohl                          
+Lehman                         Listig                        
+Kleekamp                       Becker                        
+Listig                         Becker                        
+Kohl                           Becker                        
+Lehman                         Becker                        
+Listig                         Kleekamp                      
+Lehman                         Kleekamp                      
+Kleekamp                       Schmidt                       
+Becker                         Schmidt                       
+Listig                         Schmidt                       
+Kohl                           Schmidt                       
+Lehman                         Schmidt                       
+Schmidt                        Amsel                         
+Kleekamp                       Amsel                         
+Becker                         Amsel                         
+Listig                         Amsel                         
+Kohl                           Amsel                         
+Lehman                         Amsel                         
+Jaguar                         Eber                          
+Amsel                          Eber                          
+Schmidt                        Eber                          
+Kleekamp                       Eber                          
+Becker                         Eber                          
+Listig                         Eber                          
+Kohl                           Eber                          
+Lehman                         Eber                          
+Amsel                          Jaguar                        
+Schmidt                        Jaguar                        
+Kleekamp                       Jaguar                        
+Becker                         Jaguar                        
+Listig                         Jaguar                        
+Kohl                           Jaguar                        
+Lehman                         Jaguar                        
+
+36 rows selected. 
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> -- </333>
+SQL> 
+SQL> --
+SQL> --	neue Syntax:
+SQL> --
+SQL> -- <333_neu>
+SQL> SELECT      ha1.ho_name AS Spieler1, ha2.ho_name AS Spieler2
+  2  FROM        dbs_tab_hochschulangehoeriger ha1
+  3  INNER JOIN  dbs_tab_mitarbeiter m1 ON ha1.ho_nr = m1.ho_nr AND m1.pers_nr > 508000,
+  4              dbs_tab_hoc hschulangehoeriger ha2
+  5  INNER JOIN  dbs_tab_mitarbeiter m2 ON ha2.ho_nr = m2.ho_nr AND m2.pers_nr > 508000 
+  6  WHERE       m1.pers_nr < m2.pers_nr;
+
+Error starting at line : 505 in command -
+SELECT      ha1.ho_name AS Spieler1, ha2.ho_name AS Spieler2
+FROM        dbs_tab_hochschulangehoeriger ha1
+INNER JOIN  dbs_tab_mitarbeiter m1 ON ha1.ho_nr = m1.ho_nr AND m1.pers_nr > 508000,
+            dbs_tab_hoc hschulangehoeriger ha2
+INNER JOIN  dbs_tab_mitarbeiter m2 ON ha2.ho_nr = m2.ho_nr AND m2.pers_nr > 508000 
+WHERE       m1.pers_nr < m2.pers_nr
+Error at Command Line : 508 Column : 44
+Error report -
+SQL Error: ORA-00933: SQL command not properly ended
+00933. 00000 -  "SQL command not properly ended"
+*Cause:    
+*Action:
+SQL> 
+SQL> -- </333_neu>
+SQL> 
+SQL> --
+SQL> --  Ab hier Übung 7
+SQL> --
+SQL> 
+SQL> --	3.4	Mengenoperationen
+SQL> --
+SQL> --	3.4.1	Vereinigung von Tabellen
+SQL> --
+SQL> --	Wie lautet die Menge der Personalnummern, die Professoren oder
+SQL> --	Studenten gehören? (Anzahl Datensätze: 14)
+SQL> --
+SQL> -- <341>
+SQL> 
+SQL> SELECT  p.pers_nr
+  2  FROM    dbs_tab_professor p
+  3  WHERE   p.pers_nr IS NOT NULL 
+  4  UNION
+  5  SELECT  s.pers_nr
+  6  FROM    dbs_tab_student s
+  7  WHERE   s.pers_nr IS NOT NULL;
+
+PERS_NR        
+---------------
+507252    
+507253    
+507254    
+507262    
+507263    
+508311    
+508321    
+508322    
+508514    
+508523    
+509514    
+601313    
+601414    
+602222    
+
+14 rows selected. 
+
+SQL> 
+SQL> 
+SQL> -- </341>
+SQL> 
+SQL> --
+SQL> --	3.4.2	Schneiden von Tabellen
+SQL> --
+SQL> --	Finde die Personalnummern der Mitarbeiter heraus, die Professor
+SQL> --	sind und mehr als 5.200 € verdienen. (Anzahl Datensätze: 3)
+SQL> --
+SQL> -- <342>
+SQL> SELECT  m.pers_nr
+  2  FROM    dbs_tab_mitarbeiter m
+  3  WHERE   m.beruf = 'Professor' AND m.gehalt > 5200
+  4  INTERSECT
+  5  SELECT  p.pers_nr
+  6  FROM    dbs_tab_professor p;
+
+PERS_NR        
+---------------
+508321    
+508322    
+509514    
+
+SQL> 
+SQL> -- </342>
+SQL> 
+SQL> --
+SQL> --	... auch formulierbar als join:
+SQL> --
+SQL> -- <342_join>
+SQL> SELECT  m.pers_nr
+  2  FROM    dbs_tab_professor p
+  3  LEFT OUTER JOIN dbs_tab_mitarbeiter m
+  4  ON      p.pers_nr = m.pers_nr
+  5  WHERE m.gehalt > 5200;
+
+PERS_NR        
+---------------
+508321    
+508322    
+509514    
+
+SQL> 
+SQL> 
+SQL> -- </342_join>
+SQL> 
+SQL> --
+SQL> --	3.4.3	Differenz von Tabellen
+SQL> --
+SQL> --	Wie lauten die Personalnummern solcher Mitarbeiter, die nicht
+SQL> --	Student sind? (Anzahl Datensätze: 6)
+SQL> --
+SQL> -- <343>
+SQL> SELECT  m.pers_nr
+  2  FROM    dbs_tab_mitarbeiter m
+  3  MINUS
+  4  SELECT  s.pers_nr
+  5  FROM dbs_tab_student s;
+
+PERS_NR        
+---------------
+508311    
+508321    
+508322    
+508514    
+508523    
+509514    
+
+6 rows selected. 
+
+SQL> 
+SQL> 
+SQL> -- </343>
+SQL> 
+SQL> --
+SQL> --	3.5	Aggregatfunktionen
+SQL> --
+SQL> --	3.5.1	Vollständige Verdichtung
+SQL> --
+SQL> --	Wieviele Mitarbeiter werden beschäftigt? (Anzahl Datensätze: 1)
+SQL> --
+SQL> -- <351a>
+SQL> SELECT  COUNT(*)
+  2  FROM    dbs_tab_mitarbeiter m;
+
+  COUNT(*)
+----------
+        14
+
+SQL> 
+SQL> -- </351a>
+SQL> 
+SQL> --
+SQL> --	Wie lautet das höchste, das niedrigste und das
+SQL> --	durchschnittliche Gehalt, sowie die Summe der Gehälter der
+SQL> --	Mitarbeiter? (Anzahl Datensätze: 1)
+SQL> --
+SQL> -- <351b>
+SQL> SELECT  MAX(m.gehalt) as höchstes_Gehalt, 
+  2          MIN(m.gehalt) as niedrigstes_Gehalt, 
+  3          AVG(m.gehalt) as durchschnittliche_Gehalt, 
+  4          SUM(m.gehalt) as Summe_der_Gehälter
+  5  FROM    dbs_tab_mitarbeiter m;
+
+HÖCHSTES_GEHALT NIEDRIGSTES_GEHALT DURCHSCHNITTLICHE_GEHALT SUMME_DER_GEHÄLTER
+--------------- ------------------ ------------------------ ------------------
+           5650                200                     2500              35000
+
+SQL> 
+SQL> 
+SQL> -- </351b>
+SQL> 
+SQL> --
+SQL> --	3.5.2	Gruppierung von Verdichtungen
+SQL> --
+SQL> --	Wie lauten die Durchschnittsgehälter der Mitarbeiter
+SQL> --	für jeden Fachbereich? (Anzahl Datensätze: 3)
+SQL> --
+SQL> -- <352b>
+SQL> SELECT      fb_Nr, AVG(gehalt) as durchschnittliche_Gehalt
+  2  FROM        dbs_tab_mitarbeiter 
+  3  GROUP BY    fb_Nr;
+
+F DURCHSCHNITTLICHE_GEHALT
+- ------------------------
+1                     5650
+3                     2775
+2               2163,63636
+
+SQL> 
+SQL> 
+SQL> -- </352b>
+SQL> 
+SQL> --
+SQL> --	Wie lauten die Durchschnittsgehälter der Mitarbeiter
+SQL> --	für jeden Fachbereich, wenn diese über 5.000 € liegen? (Anzahl Datensätze: 1)
+SQL> --
+SQL> 
+SQL> -- <352c>
+SQL> SELECT      fb_Nr, AVG(gehalt) as avg_Gehalt
+  2  FROM        dbs_tab_mitarbeiter 
+  3  GROUP BY    fb_Nr
+  4  HAVING      AVG(gehalt) > 5000;
+
+F AVG_GEHALT
+- ----------
+1       5650
+
+SQL> 
+SQL> -- </352c>
+SQL> 
+SQL> --
+SQL> --	3.6	Unterabfragen
+SQL> --
+SQL> --	3.6.1	'IN'-Operator
+SQL> --
+SQL> --	Wie lauten die Namen der Mitarbeiter die nicht in Bonn
+SQL> --	wohnen? (Anzahl Datensätze: 13)
+SQL> --
+SQL> 
+SQL> -- <361a>
+SQL> SELECT  ho_name
+  2  FROM    dbs_tab_hochschulangehoeriger
+  3  WHERE   ho_nr IN (
+  4          SELECT  ho_nr
+  5          FROM    dbs_tab_anschrift
+  6          WHERE   ort != 'Bonn'
+  7  );
+
+HO_NAME             
+--------------------
+Dilloo
+Grau
+Meier
+Listig
+Wachtendonk
+Barsch
+Camel
+Dachs
+Eber
+Fuchs
+Ganz
+Hahn
+Iltis
+
+13 rows selected. 
+
+SQL> 
+SQL> 
+SQL> -- </361a>
+SQL> 
+SQL> --
+SQL> --	... auch allgemeiner formulierbar als Join:
+SQL> --
+SQL> 
+SQL> -- <361a_join>
+SQL> SELECT      h.ho_name
+  2  FROM        dbs_tab_hochschulangehoeriger h
+  3  INNER JOIN  dbs_tab_anschrift a
+  4  ON          h.ho_nr = a.ho_nr
+  5  WHERE       ort != 'Bonn';
+
+HO_NAME             
+--------------------
+Dilloo
+Grau
+Meier
+Listig
+Wachtendonk
+Barsch
+Camel
+Dachs
+Eber
+Fuchs
+Ganz
+Hahn
+Iltis
+
+13 rows selected. 
+
+SQL> 
+SQL> -- </361a_join>
+SQL> 
+SQL> --
+SQL> --	3.6.2	Vergleichsoperatoren
+SQL> --
+SQL> --	Welcher (!) Hochschulangehörige wohnt im Auerweg?
+SQL> --	Achtung: warum "darf" bei "=" in dieser Anfrage nur eine
+SQL> --	Person im Auerweg wohnen? (Anzahl Datensätze: 1)
+SQL> --
+SQL> -- <362a>
+SQL> SELECT  ho_nr
+  2  FROM    dbs_tab_anschrift
+  3  WHERE   ho_nr = ANY(
+  4          SELECT  ho_nr
+  5          FROM    dbs_tab_hochschulangehoeriger
+  6  )
+  7  AND     strasse = 'Auerweg';
+
+     HO_NR
+----------
+      1016
+
+SQL> 
+SQL> -- </362a>
+SQL> --
+SQL> --	... auch formulierbar als Join (hier dürfen jedoch auch
+SQL> --	mehrere Personen im Auerweg wohnen):
+SQL> --
+SQL> -- <362a_join>
+SQL> 
+SQL> SELECT      h.ho_nr
+  2  FROM        dbs_tab_hochschulangehoeriger h
+  3  INNER JOIN  dbs_tab_anschrift a
+  4  ON          a.ho_nr = h.ho_nr
+  5  WHERE       a.strasse = 'Auerweg';
+
+     HO_NR
+----------
+      1016
+
+SQL> 
+SQL> -- </362a_join>
+SQL> --
+SQL> --	Wie lauten die Namen der Studenten, die zeitlich später
+SQL> --	(mit größerer ho_nr) als Meyer erfasst worden sind? (Anzahl Datensätze: 13)
+SQL> --
+SQL> -- <362b>
+SQL> SELECT  ho_name 
+  2  FROM    dbs_tab_hochschulangehoeriger
+  3  WHERE   ho_nr = ANY (
+  4      SELECT  ho_nr
+  5      FROM    dbs_tab_student
+  6      WHERE   ho_nr > (
+  7          SELECT  ho_nr
+  8          FROM    dbs_tab_hochschulangehoeriger
+  9          WHERE   ho_name = 'Meyer' 
+ 10      )
+ 11  );
+
+HO_NAME             
+--------------------
+Meier
+Mayer
+Mueller
+Amsel
+Barsch
+Camel
+Dachs
+Eber
+Fuchs
+Ganz
+Hahn
+Iltis
+Jaguar
+
+13 rows selected. 
+
+SQL> 
+SQL> 
+SQL> -- </362b>
+SQL> --
+SQL> --	6.3	Existenzabfragen
+SQL> --
+SQL> --	Welche Fachbereiche bieten keine Lehrveranstaltungen an? (Anzahl Datensätze: 1)
+SQL> --
+SQL> -- <363a>
+SQL> SELECT  fb_Nr
+  2  FROM    dbs_tab_fachbereich f
+  3  WHERE NOT EXISTS (
+  4      SELECT  *
+  5      FROM    dbs_tab_lehrveranstaltung lv
+  6      WHERE   f.fb_NR = lv.fb_Nr
+  7  );
+
+F
+-
+3
+
+SQL> 
+SQL> 
+SQL> -- </363a>
+SQL> --
+SQL> --	Welche Professoren (Personalnummern) halten
+SQL> --	Lehrveranstaltungen(mindestens eine)? (Anzahl Datensätze: 3)
+SQL> --
+SQL> -- <363b>
+SQL> 
+SQL> SELECT  pers_nr
+  2  FROM    dbs_tab_professor p 
+  3  WHERE   EXISTS (
+  4      SELECT  *
+  5      FROM    dbs_tab_prof_haelt_lv hlv
+  6      WHERE   p.pers_nr = hlv.pers_nr
+  7  );
+
+PERS_NR        
+---------------
+508321    
+508523    
+509514    
+
+SQL> 
+SQL> 
+SQL> -- </363b>
+SQL> --
+SQL> --	3.6.4	All-Quantor
+SQL> --
+SQL> --	Welche Mitarbeiter erhalten das größte Gehalt? (Anzahl Datensätze: 2)
+SQL> --
+SQL> -- <364a>
+SQL> SELECT  pers_nr
+  2  FROM    dbs_tab_mitarbeiter
+  3  WHERE   gehalt >= ALL (
+  4      SELECT  gehalt
+  5      FROM    dbs_tab_mitarbeiter
+  6  );
+
+PERS_NR        
+---------------
+508322    
+509514    
+
+SQL> 
+SQL> 
+SQL> -- </364a>
+SQL> --
+SQL> --	Welche Mitarbeiter verdienen weniger als andere? (Anzahl Datensätze: 12)
+SQL> --
+SQL> -- <364b>
+SQL> SELECT  pers_nr
+  2  FROM    dbs_tab_mitarbeiter
+  3  WHERE   gehalt < ANY (
+  4      SELECT  gehalt
+  5      FROM    dbs_tab_mitarbeiter
+  6  );
+
+PERS_NR        
+---------------
+507254    
+507262    
+507253    
+601313    
+507252    
+507263    
+602222    
+601414    
+508523    
+508311    
+508514    
+508321    
+
+12 rows selected. 
+
+SQL> 
+SQL> 
+SQL> -- </364b>
+SQL> --
+SQL> -- Systemdatum
+SQL> --
+SQL>   SELECT user,
+  2           TO_CHAR(SYSDATE, 'dd-mm-yy hh24:mi:ss')
+  3    FROM   dual
+  4  ;
+
+USER                           TO_CHAR(SYSDATE,'
+------------------------------ -----------------
+VKOWAL2S                       07-01-24 18:25:04
+
+SQL> --
+SQL> spool off
